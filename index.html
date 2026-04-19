@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🇫🇷 France Road Trip Planner — May 2026</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0f172a;--card:#1e293b;--accent:#3b82f6;--accent2:#8b5cf6;--green:#22c55e;--orange:#f59e0b;--red:#ef4444;--text:#e2e8f0;--muted:#94a3b8;--border:#334155}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6}
+.hero{background:linear-gradient(135deg,#1e3a5f 0%,#2d1b69 50%,#1e3a5f 100%);padding:2rem;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")}
+.hero h1{font-size:2.2rem;margin-bottom:.3rem;position:relative}
+.hero p{color:var(--muted);font-size:1.1rem;position:relative}
+.stats{display:flex;justify-content:center;gap:2rem;margin-top:1.5rem;flex-wrap:wrap;position:relative}
+.stat{text-align:center}
+.stat .num{font-size:1.8rem;font-weight:700;color:var(--accent)}
+.stat .label{font-size:.75rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+nav{background:var(--card);border-bottom:1px solid var(--border);padding:.5rem 1rem;display:flex;gap:.5rem;overflow-x:auto;position:sticky;top:0;z-index:100}
+nav button{background:none;border:1px solid var(--border);color:var(--muted);padding:.5rem 1rem;border-radius:8px;cursor:pointer;white-space:nowrap;font-size:.85rem;transition:all .2s}
+nav button:hover,nav button.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.container{max-width:1100px;margin:0 auto;padding:1rem}
+.tab{display:none}.tab.active{display:block}
+.progress-bar{background:var(--border);border-radius:10px;height:12px;margin:1rem 0;overflow:hidden}
+.progress-fill{height:100%;border-radius:10px;transition:width .5s;background:linear-gradient(90deg,var(--accent),var(--green))}
+.progress-text{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:1rem}
+.day-card{background:var(--card);border-radius:12px;padding:1.2rem;margin-bottom:1rem;border-left:4px solid var(--accent);transition:transform .2s}
+.day-card:hover{transform:translateX(4px)}
+.day-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.8rem;flex-wrap:wrap;gap:.5rem}
+.day-num{background:var(--accent);color:#fff;padding:.2rem .7rem;border-radius:6px;font-weight:700;font-size:.9rem}
+.day-date{color:var(--muted);font-size:.85rem}
+.day-route{font-size:1.1rem;font-weight:600}
+.day-details{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;margin:.8rem 0;font-size:.85rem}
+.day-details>div{background:var(--bg);padding:.6rem;border-radius:8px}
+.day-details .label{color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px}
+.highlights{margin-top:.8rem}
+.highlights h4{color:var(--accent2);font-size:.85rem;margin-bottom:.4rem}
+.highlights li{color:var(--muted);font-size:.85rem;margin-left:1.2rem;margin-bottom:.2rem}
+.category{margin-bottom:1.5rem}
+.category-header{display:flex;justify-content:space-between;align-items:center;padding:.8rem 1rem;background:var(--card);border-radius:10px;cursor:pointer;margin-bottom:.5rem;border-left:4px solid var(--accent2)}
+.category-header h3{font-size:1rem}
+.category-header .count{background:var(--accent);color:#fff;padding:.1rem .6rem;border-radius:12px;font-size:.8rem}
+.checklist{padding:0 .5rem}
+.check-item{display:flex;align-items:flex-start;gap:.7rem;padding:.6rem .8rem;background:var(--card);margin-bottom:4px;border-radius:8px;font-size:.85rem;transition:opacity .3s}
+.check-item.done{opacity:.5}
+.check-item.done .task-text{text-decoration:line-through}
+.check-item input[type=checkbox]{width:18px;height:18px;accent-color:var(--green);cursor:pointer;flex-shrink:0;margin-top:2px}
+.task-text{flex:1}
+.deadline{color:var(--orange);font-size:.75rem;white-space:nowrap;flex-shrink:0}
+.deadline.urgent{color:var(--red);font-weight:700}
+.alert-card{background:linear-gradient(135deg,#7f1d1d,#991b1b);border-radius:12px;padding:1rem 1.2rem;margin-bottom:1rem;border-left:4px solid var(--red)}
+.alert-card h4{color:#fca5a5;margin-bottom:.3rem}
+.alert-card p{color:#fecaca;font-size:.85rem}
+.tip-card{background:var(--card);border-radius:12px;padding:1rem 1.2rem;margin-bottom:.8rem;border-left:4px solid var(--green)}
+.tip-card h4{color:var(--green);margin-bottom:.3rem;font-size:.9rem}
+.tip-card p,.tip-card li{color:var(--muted);font-size:.85rem}
+.tip-card ul{margin-left:1.2rem;margin-top:.3rem}
+.budget-table{width:100%;border-collapse:collapse;margin:1rem 0}
+.budget-table th,.budget-table td{padding:.6rem .8rem;text-align:left;border-bottom:1px solid var(--border);font-size:.85rem}
+.budget-table th{color:var(--accent);text-transform:uppercase;font-size:.75rem;letter-spacing:1px}
+.budget-table tr:hover{background:var(--card)}
+.budget-total{font-weight:700;color:var(--green);font-size:1rem}
+.timeline{position:relative;padding-left:2rem}
+.timeline::before{content:'';position:absolute;left:.7rem;top:0;bottom:0;width:2px;background:var(--border)}
+.timeline-item{position:relative;margin-bottom:1rem;padding:.8rem;background:var(--card);border-radius:8px}
+.timeline-item::before{content:'';position:absolute;left:-1.65rem;top:1rem;width:12px;height:12px;border-radius:50%;background:var(--red);border:2px solid var(--bg)}
+.search-box{width:100%;padding:.7rem 1rem;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);font-size:.9rem;margin-bottom:1rem}
+.search-box:focus{outline:none;border-color:var(--accent)}
+.filter-btns{display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap}
+.filter-btns button{background:var(--card);border:1px solid var(--border);color:var(--muted);padding:.3rem .8rem;border-radius:6px;cursor:pointer;font-size:.8rem}
+.filter-btns button.active{background:var(--accent2);color:#fff;border-color:var(--accent2)}
+.rest-day{border-left-color:var(--green)!important}
+.long-drive{border-left-color:var(--orange)!important}
+@media(max-width:600px){.day-details{grid-template-columns:1fr}.stats{gap:1rem}.hero h1{font-size:1.6rem}}
+</style>
+</head>
+<body>
+<div class="hero">
+<h1>🇫🇷 France Road Trip 2026</h1>
+<p>London → South of France & Back • 2 May – 16 May</p>
+<div class="stats">
+<div class="stat"><div class="num">15</div><div class="label">Days</div></div>
+<div class="stat"><div class="num">3,000+</div><div class="label">Kilometres</div></div>
+<div class="stat"><div class="num">12</div><div class="label">Cities</div></div>
+<div class="stat"><div class="num">£1,632</div><div class="label">Accommodation</div></div>
+</div>
+</div>
+<nav id="nav">
+<button class="active" onclick="showTab('itinerary')">🗺️ Itinerary</button>
+<button onclick="showTab('checklist')">✅ Checklist</button>
+<button onclick="showTab('driving')">🚗 Driving Guide</button>
+<button onclick="showTab('dog')">🐕 Dog Travel</button>
+<button onclick="showTab('budget')">💰 Budget</button>
+<button onclick="showTab('deadlines')">⏰ Deadlines</button>
+<button onclick="showTab('packing')">🧳 Packing</button>
+<button onclick="showTab('ev')">⚡ EV Option</button>
+<button onclick="showTab('routemap')">🗺️ Route Map</button>
+<button onclick="showTab('food')">🍛 Indian Food</button>
+<button onclick="showTab('enterprise')">🏢 Enterprise Visit</button>
+</nav>
+<div class="container">
+
+<!-- ITINERARY TAB -->
+<div id="itinerary" class="tab active"></div>
+
+<!-- CHECKLIST TAB -->
+<div id="checklist" class="tab"></div>
+
+<!-- DRIVING TAB -->
+<div id="driving" class="tab">
+<h2 style="margin:1rem 0">🚗 Driving Guide — First Time in France</h2>
+<div class="alert-card"><h4>⚠️ #1 Rule: DRIVE ON THE RIGHT!</h4><p>You're used to left-hand driving in the UK. The most dangerous moments are roundabouts, turning out of petrol stations, and early mornings. Your wife should remind you at every junction for the first day.</p></div>
+<div class="tip-card"><h4>🛣️ Speed Limits</h4><ul><li>Motorway (Autoroute): 130 km/h (110 in rain)</li><li>Dual carriageway: 110 km/h</li><li>Rural roads: 80 km/h</li><li>Towns: 50 km/h (30 in some zones)</li><li>Speed cameras are EVERYWHERE — use Waze app</li></ul></div>
+<div class="tip-card"><h4>💰 Motorway Tolls (Péage)</h4><ul><li>Budget ~€200-300 total for your route</li><li>Most accept contactless card payment</li><li>Consider a Bip&Go toll tag (order online) to skip queues</li><li>Alternative: Use 'N' roads (free but slower, more scenic)</li></ul></div>
+<div class="tip-card"><h4>⛽ Fuel Tips</h4><ul><li>Supermarket fuel stations (Carrefour, Leclerc) are cheapest</li><li>Motorway fuel is 20-30% more expensive</li><li>Fill up before getting on the autoroute</li><li>Budget ~€250-350 total for 3,000+ km</li></ul></div>
+<div class="tip-card"><h4>🅿️ Parking</h4><ul><li>Blue zones: Need a parking disc (disque de stationnement) — buy at tabac shops</li><li>Pay & display: Look for horodateur machines</li><li>Many cities have underground car parks (€10-20/day)</li><li>Free parking often available on outskirts + walk in</li></ul></div>
+<div class="alert-card"><h4>🚨 SOLO DRIVER — You're Doing All 3,000+ km Alone</h4><p>This is manageable but you MUST respect your limits. No one else can take over. Plan your days around driving fatigue, not sightseeing ambition.</p></div>
+<div class="tip-card"><h4>😴 Solo Driver Fatigue Plan</h4><ul><li>HARD RULE: Stop every 90 minutes, no exceptions. Get out, walk the dog, stretch</li><li>French motorway rest areas (Aires) are every 20-30 km — use them liberally</li><li>Your hardest days: Day 1 (5-6 hrs), Day 4 (3h10m), Day 13 (4h30m)</li><li>Leave EARLY on long drive days (6-7 AM) — you drive better fresh</li><li>No driving after dark if you can avoid it — unfamiliar roads + right-hand side + fatigue = danger</li><li>Wife's job: navigator, DJ, snack supplier, and keeping you talking/alert</li><li>Keep water, coffee, and glucose sweets within reach</li><li>Download 5-6 podcasts/audiobooks per long drive day</li><li>If you feel ANY drowsiness: pull over immediately, 20-min power nap, coffee, then wait 20 mins for caffeine to kick in</li><li>Don't push through — you have the dog and your wife in the car</li><li>Consider breaking Day 13 (Lyon→Dijon, 4h30m) with a lunch stop halfway</li></ul></div>
+<div class="tip-card"><h4>📋 Legal Requirements in the Car</h4><ul><li>✅ Hi-vis vest x2 (inside car, NOT in boot)</li><li>✅ Warning triangle</li><li>✅ UK driving licence + IDP recommended</li><li>✅ Crit'Air vignette on windscreen</li><li>✅ Headlight beam deflectors (or auto-adjusting)</li><li>✅ GB sticker if no GB on number plate</li><li>✅ Rental agreement + insurance docs</li></ul></div>
+<div class="tip-card"><h4>🔄 Roundabouts</h4><ul><li>Traffic ON the roundabout has priority (opposite to some UK habits)</li><li>Enter from the RIGHT lane</li><li>Signal LEFT when entering, RIGHT when exiting</li><li>Priorité à droite: At unmarked junctions, give way to traffic from the RIGHT</li></ul></div>
+</div>
+
+<!-- DOG TAB -->
+<div id="dog" class="tab">
+<h2 style="margin:1rem 0">🐕 Dog Travel Checklist</h2>
+<div class="alert-card"><h4>⚠️ Critical: Tapeworm Treatment for UK Return</h4><p>Your dog MUST have tapeworm treatment by a vet 1-5 days before returning to the UK (between 11-15 May). You've noted Lyon (13 May) — book veterinaire-fermaud.fr NOW. Have a backup vet in Dijon (14 May).</p></div>
+<div class="alert-card"><h4>⚠️ Animal Health Certificate</h4><p>Must be issued by a UK vet no more than 10 days before travel. Your appointment on 22 April at Alcombe is perfect. Confirm it's booked!</p></div>
+<div class="tip-card"><h4>📋 Documents Needed</h4><ul><li>Animal Health Certificate (AHC) — from UK vet</li><li>Proof of rabies vaccination (21+ days before travel)</li><li>Microchip details</li><li>Tapeworm treatment certificate (for return)</li><li>Keep ALL originals together in a waterproof folder</li></ul></div>
+<div class="tip-card"><h4>🚗 Dog in the Car</h4><ul><li>French law: Dogs must be restrained (harness/crate)</li><li>Stop every 2 hours for water + toilet break</li><li>NEVER leave dog in car in May heat (South France can hit 25°C+)</li><li>Bring shade cover for car windows</li><li>Frozen Kong toy = great car entertainment</li></ul></div>
+<div class="tip-card"><h4>🏖️ Dog-Friendly France Tips</h4><ul><li>Most restaurants allow dogs on terraces</li><li>Many beaches ban dogs May-Sept (check locally)</li><li>Cagnes-sur-Mer has dog-friendly beach sections</li><li>Carry water bowl everywhere — it gets warm</li><li>French pharmacies sell tick removal tools</li></ul></div>
+<div class="tip-card"><h4>🧳 Dog Packing List</h4><ul><li>Food (15 days supply or buy Royal Canin in French supermarkets)</li><li>Collapsible bowls x2 (water + food)</li><li>Lead, harness, long line for beaches</li><li>Poo bags (lots!)</li><li>Dog bed/blanket</li><li>Towel for beach/rain</li><li>Favourite toy</li><li>Tick/flea treatment (apply before trip)</li><li>Dog first aid kit</li><li>Car harness or travel crate</li></ul></div>
+</div>
+
+<!-- BUDGET TAB -->
+<div id="budget" class="tab">
+<h2 style="margin:1rem 0">💰 Budget Breakdown</h2>
+<table class="budget-table">
+<thead><tr><th>Category</th><th>Estimate</th><th>Notes</th></tr></thead>
+<tbody>
+<tr><td>🏨 Accommodation</td><td>£1,632</td><td>As per your bookings</td></tr>
+<tr><td>🚗 Car Rental</td><td>£400-600</td><td>Enterprise Brentford, 15 days — confirm quote</td></tr>
+<tr><td>🚄 Eurotunnel</td><td>£200-250</td><td>Return + pet supplement (~£22 each way)</td></tr>
+<tr><td>⛽ Fuel</td><td>£250-350</td><td>~3,000 km, French fuel prices</td></tr>
+<tr><td>🛣️ Tolls</td><td>£170-250</td><td>French motorway tolls</td></tr>
+<tr><td>🍽️ Food & Dining</td><td>£750-1,200</td><td>~£50-80/day, mix of restaurants & supermarkets</td></tr>
+<tr><td>🎭 Activities</td><td>£200-300</td><td>Sightseeing, wine tasting, champagne tours</td></tr>
+<tr><td>🐕 Dog Vet (France)</td><td>£50-100</td><td>Tapeworm treatment + any emergencies</td></tr>
+<tr><td>🅿️ Parking</td><td>£100-150</td><td>City car parks, ~€10-15/day</td></tr>
+<tr><td>🛒 Miscellaneous</td><td>£100-200</td><td>Souvenirs, champagne, unexpected costs</td></tr>
+<tr style="border-top:2px solid var(--accent)"><td class="budget-total">TOTAL ESTIMATE</td><td class="budget-total">£3,850-5,030</td><td style="color:var(--muted)">Plan for ~£4,500 to be safe</td></tr>
+</tbody>
+</table>
+<div class="tip-card" style="margin-top:1rem"><h4>💡 Money-Saving Tips</h4><ul><li>Use supermarkets (Carrefour, Leclerc) for picnic lunches — baguette + cheese + wine = €10</li><li>Fill fuel at supermarket stations, not motorway</li><li>Free parking often available on city outskirts</li><li>Many churches, gardens, and town walks are free</li><li>Bring a Monzo/Starling card for zero FX fees</li><li>Lidl/Aldi exist in France too — great for snacks</li></ul></div>
+</div>
+
+<!-- DEADLINES TAB -->
+<div id="deadlines" class="tab">
+<h2 style="margin:1rem 0">⏰ Critical Deadlines</h2>
+<div class="alert-card"><h4>🚨 IMMEDIATE (This Week — by 25 Apr)</h4>
+<p>• Crit'Air vignette: Ask Enterprise if car has one on 29 Apr, otherwise order online + keep PDF<br>
+• Book dog's AHC appointment (22 Apr at Alcombe — confirm!)<br>
+• Buy: Hi-vis vests, warning triangle, EU adapters, headlight deflectors<br>
+• Get International Driving Permit from Post Office<br>
+• Book Eurotunnel both ways + pet supplement on 29 Apr (need rental reg)<br>
+• Enterprise rental confirmed for France ✅ — sole driver, plan rest stops carefully</p></div>
+<div class="timeline" id="deadline-timeline"></div>
+</div>
+
+<!-- PACKING TAB -->
+<div id="packing" class="tab">
+<h2 style="margin:1rem 0">🧳 Complete Packing List</h2>
+<p style="color:var(--muted);margin-bottom:.5rem">May in South France: 18-25°C days, 10-15°C evenings. Light layers are key.</p>
+<p style="color:var(--muted);margin-bottom:1rem;font-size:.85rem">💡 Pack 4-5 days of clothes and do laundry mid-trip at your Aix Airbnb (Days 9-10) to pack lighter.</p>
+<input class="search-box" placeholder="🔍 Search packing list..." oninput="filterPacking(this.value)">
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+<h3>👔 Clothes — Him</h3><span class="count" id="cnt-👔 C">0/14</span></div>
+<div class="checklist"><div class="check-item" data-task="7x t-shirts/casual tops (light cotton/linen)">
+<input type="checkbox" onchange="togglePack('pack2_7x t-shirts/casual tops (light cotton/li',this)">
+<span class="task-text">7x t-shirts/casual tops (light cotton/linen)</span></div><div class="check-item" data-task="2x light long-sleeve shirts (evenings, restaurants)">
+<input type="checkbox" onchange="togglePack('pack2_2x light long-sleeve shirts (evenings, r',this)">
+<span class="task-text">2x light long-sleeve shirts (evenings, restaurants)</span></div><div class="check-item" data-task="1x light jumper/hoodie (cool evenings in beaune/reims)">
+<input type="checkbox" onchange="togglePack('pack2_1x light jumper/hoodie (cool evenings in',this)">
+<span class="task-text">1x light jumper/hoodie (cool evenings in Beaune/Reims)</span></div><div class="check-item" data-task="1x packable waterproof jacket">
+<input type="checkbox" onchange="togglePack('pack2_1x packable waterproof jacket',this)">
+<span class="task-text">1x packable waterproof jacket</span></div><div class="check-item" data-task="3x shorts (nice, aix, montpellier)">
+<input type="checkbox" onchange="togglePack('pack2_3x shorts (Nice, Aix, Montpellier)',this)">
+<span class="task-text">3x shorts (Nice, Aix, Montpellier)</span></div><div class="check-item" data-task="2x light trousers/chinos">
+<input type="checkbox" onchange="togglePack('pack2_2x light trousers/chinos',this)">
+<span class="task-text">2x light trousers/chinos</span></div><div class="check-item" data-task="1x jeans (cooler north — paris, reims)">
+<input type="checkbox" onchange="togglePack('pack2_1x jeans (cooler north — Paris, Reims)',this)">
+<span class="task-text">1x jeans (cooler north — Paris, Reims)</span></div><div class="check-item" data-task="1x smart-casual outfit (nice dinner in lyon/avignon)">
+<input type="checkbox" onchange="togglePack('pack2_1x smart-casual outfit (nice dinner in L',this)">
+<span class="task-text">1x smart-casual outfit (nice dinner in Lyon/Avignon)</span></div><div class="check-item" data-task="comfortable walking shoes (cobblestones daily!)">
+<input type="checkbox" onchange="togglePack('pack2_Comfortable walking shoes (cobblestones ',this)">
+<span class="task-text">Comfortable walking shoes (cobblestones daily!)</span></div><div class="check-item" data-task="sandals/flip-flops">
+<input type="checkbox" onchange="togglePack('pack2_Sandals/flip-flops',this)">
+<span class="task-text">Sandals/flip-flops</span></div><div class="check-item" data-task="swimwear">
+<input type="checkbox" onchange="togglePack('pack2_Swimwear',this)">
+<span class="task-text">Swimwear</span></div><div class="check-item" data-task="7-8x underwear & socks">
+<input type="checkbox" onchange="togglePack('pack2_7-8x underwear & socks',this)">
+<span class="task-text">7-8x underwear & socks</span></div><div class="check-item" data-task="sunhat + sunglasses">
+<input type="checkbox" onchange="togglePack('pack2_Sunhat + sunglasses',this)">
+<span class="task-text">Sunhat + sunglasses</span></div><div class="check-item" data-task="sleepwear">
+<input type="checkbox" onchange="togglePack('pack2_Sleepwear',this)">
+<span class="task-text">Sleepwear</span></div></div></div>
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+<h3>👗 Clothes — Her</h3><span class="count" id="cnt-👗 C">0/12</span></div>
+<div class="checklist"><div class="check-item" data-task="7x tops/blouses (light fabrics)">
+<input type="checkbox" onchange="togglePack('pack2_7x tops/blouses (light fabrics)',this)">
+<span class="task-text">7x tops/blouses (light fabrics)</span></div><div class="check-item" data-task="2x light cardigans/wraps (evenings)">
+<input type="checkbox" onchange="togglePack('pack2_2x light cardigans/wraps (evenings)',this)">
+<span class="task-text">2x light cardigans/wraps (evenings)</span></div><div class="check-item" data-task="1x packable waterproof jacket">
+<input type="checkbox" onchange="togglePack('pack2_1x packable waterproof jacket',this)">
+<span class="task-text">1x packable waterproof jacket</span></div><div class="check-item" data-task="3x shorts/skirts">
+<input type="checkbox" onchange="togglePack('pack2_3x shorts/skirts',this)">
+<span class="task-text">3x shorts/skirts</span></div><div class="check-item" data-task="2x light trousers/dresses">
+<input type="checkbox" onchange="togglePack('pack2_2x light trousers/dresses',this)">
+<span class="task-text">2x light trousers/dresses</span></div><div class="check-item" data-task="1x smart-casual outfit (dinner out)">
+<input type="checkbox" onchange="togglePack('pack2_1x smart-casual outfit (dinner out)',this)">
+<span class="task-text">1x smart-casual outfit (dinner out)</span></div><div class="check-item" data-task="comfortable walking shoes (cobblestones!)">
+<input type="checkbox" onchange="togglePack('pack2_Comfortable walking shoes (cobblestones!',this)">
+<span class="task-text">Comfortable walking shoes (cobblestones!)</span></div><div class="check-item" data-task="sandals">
+<input type="checkbox" onchange="togglePack('pack2_Sandals',this)">
+<span class="task-text">Sandals</span></div><div class="check-item" data-task="swimwear">
+<input type="checkbox" onchange="togglePack('pack2_Swimwear',this)">
+<span class="task-text">Swimwear</span></div><div class="check-item" data-task="7-8x underwear">
+<input type="checkbox" onchange="togglePack('pack2_7-8x underwear',this)">
+<span class="task-text">7-8x underwear</span></div><div class="check-item" data-task="sunhat + sunglasses">
+<input type="checkbox" onchange="togglePack('pack2_Sunhat + sunglasses',this)">
+<span class="task-text">Sunhat + sunglasses</span></div><div class="check-item" data-task="sleepwear">
+<input type="checkbox" onchange="togglePack('pack2_Sleepwear',this)">
+<span class="task-text">Sleepwear</span></div></div></div>
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+<h3>🧴 Toiletries & Health</h3><span class="count" id="cnt-🧴 T">0/9</span></div>
+<div class="checklist"><div class="check-item" data-task="sunscreen spf50 (riviera sun is strong in may)">
+<input type="checkbox" onchange="togglePack('pack2_Sunscreen SPF50 (Riviera sun is strong i',this)">
+<span class="task-text">Sunscreen SPF50 (Riviera sun is strong in May)</span></div><div class="check-item" data-task="aftersun/moisturiser">
+<input type="checkbox" onchange="togglePack('pack2_Aftersun/moisturiser',this)">
+<span class="task-text">Aftersun/moisturiser</span></div><div class="check-item" data-task="insect repellent (mosquitoes in southern france evenings)">
+<input type="checkbox" onchange="togglePack('pack2_Insect repellent (mosquitoes in southern',this)">
+<span class="task-text">Insect repellent (mosquitoes in southern France evenings)</span></div><div class="check-item" data-task="basic first aid kit (plasters, paracetamol, ibuprofen, antihistamines)">
+<input type="checkbox" onchange="togglePack('pack2_Basic first aid kit (plasters, paracetam',this)">
+<span class="task-text">Basic first aid kit (plasters, paracetamol, ibuprofen, antihistamines)</span></div><div class="check-item" data-task="prescription medications in original packaging + copy of prescription">
+<input type="checkbox" onchange="togglePack('pack2_Prescription medications in original pac',this)">
+<span class="task-text">Prescription medications in original packaging + copy of prescription</span></div><div class="check-item" data-task="hand sanitiser">
+<input type="checkbox" onchange="togglePack('pack2_Hand sanitiser',this)">
+<span class="task-text">Hand sanitiser</span></div><div class="check-item" data-task="wet wipes (dog + car = essential)">
+<input type="checkbox" onchange="togglePack('pack2_Wet wipes (dog + car = essential)',this)">
+<span class="task-text">Wet wipes (dog + car = essential)</span></div><div class="check-item" data-task="travel-size toiletries (or buy at french pharmacies)">
+<input type="checkbox" onchange="togglePack('pack2_Travel-size toiletries (or buy at French',this)">
+<span class="task-text">Travel-size toiletries (or buy at French pharmacies)</span></div><div class="check-item" data-task="toothbrushes, toothpaste, deodorant">
+<input type="checkbox" onchange="togglePack('pack2_Toothbrushes, toothpaste, deodorant',this)">
+<span class="task-text">Toothbrushes, toothpaste, deodorant</span></div></div></div>
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+<h3>🔌 Tech & Car</h3><span class="count" id="cnt-🔌 T">0/7</span></div>
+<div class="checklist"><div class="check-item" data-task="phone chargers + usb-c cables">
+<input type="checkbox" onchange="togglePack('pack2_Phone chargers + USB-C cables',this)">
+<span class="task-text">Phone chargers + USB-C cables</span></div><div class="check-item" data-task="power bank">
+<input type="checkbox" onchange="togglePack('pack2_Power bank',this)">
+<span class="task-text">Power bank</span></div><div class="check-item" data-task="eu/french power adapters x2 (type c/e round two-pin)">
+<input type="checkbox" onchange="togglePack('pack2_EU/French power adapters x2 (Type C/E ro',this)">
+<span class="task-text">EU/French power adapters x2 (Type C/E round two-pin)</span></div><div class="check-item" data-task="car phone mount">
+<input type="checkbox" onchange="togglePack('pack2_Car phone mount',this)">
+<span class="task-text">Car phone mount</span></div><div class="check-item" data-task="12v car usb charger">
+<input type="checkbox" onchange="togglePack('pack2_12V car USB charger',this)">
+<span class="task-text">12V car USB charger</span></div><div class="check-item" data-task="headphones (wife — music while you drive)">
+<input type="checkbox" onchange="togglePack('pack2_Headphones (wife — music while you drive',this)">
+<span class="task-text">Headphones (wife — music while you drive)</span></div><div class="check-item" data-task="camera or ensure phone storage is clear">
+<input type="checkbox" onchange="togglePack('pack2_Camera or ensure phone storage is clear',this)">
+<span class="task-text">Camera or ensure phone storage is clear</span></div></div></div>
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+<h3>🚗 Car Comfort (you're spending a LOT of time driving)</h3><span class="count" id="cnt-🚗 C">0/8</span></div>
+<div class="checklist"><div class="check-item" data-task="travel pillow (wife — passenger seat naps)">
+<input type="checkbox" onchange="togglePack('pack2_Travel pillow (wife — passenger seat nap',this)">
+<span class="task-text">Travel pillow (wife — passenger seat naps)</span></div><div class="check-item" data-task="light blanket (car ac can be cold)">
+<input type="checkbox" onchange="togglePack('pack2_Light blanket (car AC can be cold)',this)">
+<span class="task-text">Light blanket (car AC can be cold)</span></div><div class="check-item" data-task="reusable water bottles x2">
+<input type="checkbox" onchange="togglePack('pack2_Reusable water bottles x2',this)">
+<span class="task-text">Reusable water bottles x2</span></div><div class="check-item" data-task="thermos flask (fill with coffee at airbnbs before long drives)">
+<input type="checkbox" onchange="togglePack('pack2_Thermos flask (fill with coffee at Airbn',this)">
+<span class="task-text">Thermos flask (fill with coffee at Airbnbs before long drives)</span></div><div class="check-item" data-task="snacks bag — biscuits, nuts, crisps">
+<input type="checkbox" onchange="togglePack('pack2_Snacks bag — biscuits, nuts, crisps',this)">
+<span class="task-text">Snacks bag — biscuits, nuts, crisps</span></div><div class="check-item" data-task="indian snacks from local shop (won't find in rural france!)">
+<input type="checkbox" onchange="togglePack('pack2_Indian snacks from local shop (wont fin',this)">
+<span class="task-text">Indian snacks from local shop (won't find in rural France!)</span></div><div class="check-item" data-task="wet wipes & tissues">
+<input type="checkbox" onchange="togglePack('pack2_Wet wipes & tissues',this)">
+<span class="task-text">Wet wipes & tissues</span></div><div class="check-item" data-task="plastic bags (rubbish, wet dog towel, dirty shoes)">
+<input type="checkbox" onchange="togglePack('pack2_Plastic bags (rubbish, wet dog towel, di',this)">
+<span class="task-text">Plastic bags (rubbish, wet dog towel, dirty shoes)</span></div></div></div>
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+<h3>🐕 Dog Supplies</h3><span class="count" id="cnt-🐕 D">0/10</span></div>
+<div class="checklist"><div class="check-item" data-task="dog food for 15 days (or buy royal canin in france)">
+<input type="checkbox" onchange="togglePack('pack2_Dog food for 15 days (or buy Royal Canin',this)">
+<span class="task-text">Dog food for 15 days (or buy Royal Canin in France)</span></div><div class="check-item" data-task="collapsible bowls x2 (water + food)">
+<input type="checkbox" onchange="togglePack('pack2_Collapsible bowls x2 (water + food)',this)">
+<span class="task-text">Collapsible bowls x2 (water + food)</span></div><div class="check-item" data-task="lead, harness, long line for beaches">
+<input type="checkbox" onchange="togglePack('pack2_Lead, harness, long line for beaches',this)">
+<span class="task-text">Lead, harness, long line for beaches</span></div><div class="check-item" data-task="poo bags (loads!)">
+<input type="checkbox" onchange="togglePack('pack2_Poo bags (loads!)',this)">
+<span class="task-text">Poo bags (loads!)</span></div><div class="check-item" data-task="dog bed/blanket for car + accommodation">
+<input type="checkbox" onchange="togglePack('pack2_Dog bed/blanket for car + accommodation',this)">
+<span class="task-text">Dog bed/blanket for car + accommodation</span></div><div class="check-item" data-task="dog towel">
+<input type="checkbox" onchange="togglePack('pack2_Dog towel',this)">
+<span class="task-text">Dog towel</span></div><div class="check-item" data-task="favourite toy">
+<input type="checkbox" onchange="togglePack('pack2_Favourite toy',this)">
+<span class="task-text">Favourite toy</span></div><div class="check-item" data-task="car harness/seatbelt (french law — must be restrained)">
+<input type="checkbox" onchange="togglePack('pack2_Car harness/seatbelt (French law — must ',this)">
+<span class="task-text">Car harness/seatbelt (French law — must be restrained)</span></div><div class="check-item" data-task="tick/flea treatment (apply before departure)">
+<input type="checkbox" onchange="togglePack('pack2_Tick/flea treatment (apply before depart',this)">
+<span class="task-text">Tick/flea treatment (apply before departure)</span></div><div class="check-item" data-task="dog first aid basics">
+<input type="checkbox" onchange="togglePack('pack2_Dog first aid basics',this)">
+<span class="task-text">Dog first aid basics</span></div></div></div>
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+<h3>📄 Documents (one waterproof folder)</h3><span class="count" id="cnt-📄 D">0/10</span></div>
+<div class="checklist"><div class="check-item" data-task="passports (both)">
+<input type="checkbox" onchange="togglePack('pack2_Passports (both)',this)">
+<span class="task-text">Passports (both)</span></div><div class="check-item" data-task="brp cards">
+<input type="checkbox" onchange="togglePack('pack2_BRP cards',this)">
+<span class="task-text">BRP cards</span></div><div class="check-item" data-task="schengen visas">
+<input type="checkbox" onchange="togglePack('pack2_Schengen visas',this)">
+<span class="task-text">Schengen visas</span></div><div class="check-item" data-task="driving licence + idp">
+<input type="checkbox" onchange="togglePack('pack2_Driving licence + IDP',this)">
+<span class="task-text">Driving licence + IDP</span></div><div class="check-item" data-task="dog ahc + vaccination records + microchip number">
+<input type="checkbox" onchange="togglePack('pack2_Dog AHC + vaccination records + microchi',this)">
+<span class="task-text">Dog AHC + vaccination records + microchip number</span></div><div class="check-item" data-task="rental agreement">
+<input type="checkbox" onchange="togglePack('pack2_Rental agreement',this)">
+<span class="task-text">Rental agreement</span></div><div class="check-item" data-task="eurotunnel booking confirmation">
+<input type="checkbox" onchange="togglePack('pack2_Eurotunnel booking confirmation',this)">
+<span class="task-text">Eurotunnel booking confirmation</span></div><div class="check-item" data-task="hotel/airbnb confirmations (printed as offline backup)">
+<input type="checkbox" onchange="togglePack('pack2_Hotel/Airbnb confirmations (printed as o',this)">
+<span class="task-text">Hotel/Airbnb confirmations (printed as offline backup)</span></div><div class="check-item" data-task="travel insurance policy">
+<input type="checkbox" onchange="togglePack('pack2_Travel insurance policy',this)">
+<span class="task-text">Travel insurance policy</span></div><div class="check-item" data-task="photocopies of everything (keep separate from originals)">
+<input type="checkbox" onchange="togglePack('pack2_Photocopies of everything (keep separate',this)">
+<span class="task-text">Photocopies of everything (keep separate from originals)</span></div></div></div>
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+<h3>🛒 Things to Buy Before Trip</h3><span class="count" id="cnt-🛒 T">0/17</span></div>
+<div class="checklist"><div class="check-item" data-task="hi-vis vests x2 — halfords ~£5 (if enterprise doesn't provide)">
+<input type="checkbox" onchange="togglePack('pack2_Hi-vis vests x2 — Halfords ~£5 (if Enter',this)">
+<span class="task-text">Hi-vis vests x2 — Halfords ~£5 (if Enterprise doesn't provide)</span></div><div class="check-item" data-task="warning triangle — halfords ~£8 (if enterprise doesn't provide)">
+<input type="checkbox" onchange="togglePack('pack2_Warning triangle — Halfords ~£8 (if Ente',this)">
+<span class="task-text">Warning triangle — Halfords ~£8 (if Enterprise doesn't provide)</span></div><div class="check-item" data-task="eu power adapters x2 — amazon ~£8">
+<input type="checkbox" onchange="togglePack('pack2_EU power adapters x2 — Amazon ~£8',this)">
+<span class="task-text">EU power adapters x2 — Amazon ~£8</span></div><div class="check-item" data-task="car phone mount — amazon ~£12">
+<input type="checkbox" onchange="togglePack('pack2_Car phone mount — Amazon ~£12',this)">
+<span class="task-text">Car phone mount — Amazon ~£12</span></div><div class="check-item" data-task="dog car harness/seatbelt — amazon ~£15">
+<input type="checkbox" onchange="togglePack('pack2_Dog car harness/seatbelt — Amazon ~£15',this)">
+<span class="task-text">Dog car harness/seatbelt — Amazon ~£15</span></div><div class="check-item" data-task="collapsible dog bowls — amazon ~£8">
+<input type="checkbox" onchange="togglePack('pack2_Collapsible dog bowls — Amazon ~£8',this)">
+<span class="task-text">Collapsible dog bowls — Amazon ~£8</span></div><div class="check-item" data-task="plugsurfing rfid card ~£20 (if going ev)">
+<input type="checkbox" onchange="togglePack('pack2_Plugsurfing RFID card ~£20 (if going EV)',this)">
+<span class="task-text">Plugsurfing RFID card ~£20 (if going EV)</span></div><div class="check-item" data-task="cash: €100-150 in small notes (parking machines, markets, tolls)">
+<input type="checkbox" onchange="togglePack('pack2_Cash: €100-150 in small notes (parking m',this)">
+<span class="task-text">Cash: €100-150 in small notes (parking machines, markets, tolls)</span></div><div class="check-item" data-task="reusable tote bags for french markets">
+<input type="checkbox" onchange="togglePack('pack2_Reusable tote bags for French markets',this)">
+<span class="task-text">Reusable tote bags for French markets</span></div><div class="check-item" data-task="small daypack/backpack for day walks">
+<input type="checkbox" onchange="togglePack('pack2_Small daypack/backpack for day walks',this)">
+<span class="task-text">Small daypack/backpack for day walks</span></div><div class="check-item" data-task="compact umbrella">
+<input type="checkbox" onchange="togglePack('pack2_Compact umbrella',this)">
+<span class="task-text">Compact umbrella</span></div><div class="check-item" data-task="pen (border forms)">
+<input type="checkbox" onchange="togglePack('pack2_Pen (border forms)',this)">
+<span class="task-text">Pen (border forms)</span></div><div class="check-item" data-task="download: offline google maps for all of france">
+<input type="checkbox" onchange="togglePack('pack2_Download: offline Google Maps for all of',this)">
+<span class="task-text">Download: offline Google Maps for all of France</span></div><div class="check-item" data-task="download: google translate french offline pack">
+<input type="checkbox" onchange="togglePack('pack2_Download: Google Translate French offlin',this)">
+<span class="task-text">Download: Google Translate French offline pack</span></div><div class="check-item" data-task="download: waze app">
+<input type="checkbox" onchange="togglePack('pack2_Download: Waze app',this)">
+<span class="task-text">Download: Waze app</span></div><div class="check-item" data-task="download: abrp + chargemap apps (if ev)">
+<input type="checkbox" onchange="togglePack('pack2_Download: ABRP + Chargemap apps (if EV)',this)">
+<span class="task-text">Download: ABRP + Chargemap apps (if EV)</span></div><div class="check-item" data-task="download: podcasts/audiobooks for long drives">
+<input type="checkbox" onchange="togglePack('pack2_Download: podcasts/audiobooks for long d',this)">
+<span class="task-text">Download: podcasts/audiobooks for long drives</span></div></div></div>
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+<h3>🇫🇷 Buy in France (don't pack)</h3><span class="count" id="cnt-🇫🇷 ">0/4</span></div>
+<div class="checklist"><div class="check-item" data-task="wine 🍷">
+<input type="checkbox" onchange="togglePack('pack2_Wine 🍷',this)">
+<span class="task-text">Wine 🍷</span></div><div class="check-item" data-task="bread, cheese, charcuterie for picnic lunches">
+<input type="checkbox" onchange="togglePack('pack2_Bread, cheese, charcuterie for picnic lu',this)">
+<span class="task-text">Bread, cheese, charcuterie for picnic lunches</span></div><div class="check-item" data-task="champagne in reims day 14 (bring an empty bag for this!)">
+<input type="checkbox" onchange="togglePack('pack2_Champagne in Reims Day 14 (bring an empt',this)">
+<span class="task-text">Champagne in Reims Day 14 (bring an empty bag for this!)</span></div><div class="check-item" data-task="sunscreen from french pharmacy if you forget (la roche-posay, bioderma)">
+<input type="checkbox" onchange="togglePack('pack2_Sunscreen from French pharmacy if you fo',this)">
+<span class="task-text">Sunscreen from French pharmacy if you forget (La Roche-Posay, Bioderma)</span></div></div></div>
+</div>
+
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><h3>🇫🇷 France / European Travel</h3><span class="count">3</span></div>
+<div class="checklist">
+<div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Confirm France is covered under the rental agreement</span></div>
+<div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Any additional charge or insurance for driving in France?</span></div>
+<div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Is mileage unlimited? <em>(You're doing 3,000+ km)</em></span></div>
+</div></div>
+
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><h3>🦺 Equipment</h3><span class="count">3</span></div>
+<div class="checklist">
+<div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Does the car come with hi-vis vests and warning triangle?</span></div>
+<div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Do you offer a European driving kit? How much?</span></div>
+<div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Does the car have auto-adjusting headlights or need deflectors?</span></div>
+</div></div>
+
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><h3>📋 Registration & Crit'Air</h3><span class="count">2</span></div>
+<div class="checklist">
+<div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Can you assign my specific car early so I can get the reg number before 29 Apr?</span></div>
+<div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Does any car in your fleet already have a French Crit'Air sticker?</span></div>
+</div></div>
+
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><h3>🐕 Dog Policy</h3><span class="count">2</span></div>
+<div class="checklist">
+<div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Is there a pet policy or additional cleaning fee?</span></div>
+<div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Any restrictions on dogs in the car?</span></div>
+</div></div>
+
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><h3>📅 Practical / Logistics</h3><span class="count">4</span></div>
+<div class="checklist">
+<div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">What's the earliest pickup time on 29 Apr?</span></div>
+<div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">What time do I need to return on 16 May? <em>(You're arriving back evening)</em></span></div>
+<div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">What fuel/charge level do I need to return it at?</span></div>
+<div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">What's the insurance excess? Do you offer excess waiver?</span></div>
+</div></div>
+
+<div class="tip-card" style="margin-top:1.5rem"><h4>📝 Notes Space</h4>
+<textarea style="width:100%;min-height:150px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:.8rem;font-family:inherit;font-size:.9rem;resize:vertical" placeholder="Jot down their answers here...&#10;&#10;Car model offered:&#10;Price quoted:&#10;Hybrid/EV available:&#10;Pet fee:&#10;Pickup time:&#10;Return time:"></textarea>
+</div>
+
+</div>
+<div id="food" class="tab">
+<h2 style="margin:1rem 0">🍛 Indian Restaurants by City</h2>
+<p style="color:var(--muted);margin-bottom:1rem">Google Maps links to find top-rated Indian restaurants at each stop. Check ratings and reviews before you go!</p>
+<div class="tip-card"><h4>💡 General Tips</h4><ul>
+<li>Indian food in France is hit-or-miss outside Paris and big cities</li>
+<li>Smaller towns (Beaune, St Paul de Vence) probably won't have any</li>
+<li>Pack Indian snacks from London — namkeen, biscuits, instant chai</li>
+<li>French supermarkets stock Patak's sauces and basmati rice if you want to cook at Airbnbs</li>
+<li>Don't miss French food entirely — Lyon bouchons, Provençal cuisine, and fresh market food are incredible</li>
+</ul></div>
+<div class="day-card"><div class="day-header"><span class="day-num">Day 1</span><span class="day-route">📍 Versailles / Paris</span></div><div style="margin:.5rem 0"><a href="https://www.google.com/maps/search/indian+restaurant+Versailles+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Indian restaurants in Versailles</a><a href="https://www.google.com/maps/search/best+indian+restaurant+Paris+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Indian restaurants in Paris</a><a href="https://www.google.com/maps/search/Passage+Brady+Paris+Indian+restaurant" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Paris Passage Brady — 'Little India'</a></div><p style="color:var(--muted);font-size:.85rem;margin-top:.5rem">💡 Paris has France's best Indian food. Passage Brady (10th arr.) is a whole street of Indian restaurants.</p></div>
+<div class="day-card"><div class="day-header"><span class="day-num">Day 2</span><span class="day-route">📍 Beaune</span></div><div style="margin:.5rem 0"><a href="https://www.google.com/maps/search/indian+restaurant+Beaune+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Indian restaurants in Beaune</a><a href="https://www.google.com/maps/search/indian+restaurant+Dijon+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Indian restaurants in Dijon (30 min)</a></div><p style="color:var(--muted);font-size:.85rem;margin-top:.5rem">💡 Small town — limited options. Try a French meal here instead — Burgundy is wine & beef country.</p></div>
+<div class="day-card"><div class="day-header"><span class="day-num">Day 3</span><span class="day-route">📍 Avignon</span></div><div style="margin:.5rem 0"><a href="https://www.google.com/maps/search/indian+restaurant+Avignon+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Indian restaurants in Avignon</a></div><p style="color:var(--muted);font-size:.85rem;margin-top:.5rem">💡 A few options in the old town. Check Google ratings before walking in.</p></div>
+<div class="day-card"><div class="day-header"><span class="day-num">Days 4-5</span><span class="day-route">📍 St Paul de Vence</span></div><div style="margin:.5rem 0"><a href="https://www.google.com/maps/search/indian+restaurant+Saint-Paul-de-Vence+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Indian restaurants near St Paul de Vence</a><a href="https://www.google.com/maps/search/indian+restaurant+Antibes+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Indian restaurants in Antibes (nearby)</a></div><p style="color:var(--muted);font-size:.85rem;margin-top:.5rem">💡 Tiny medieval village — try Antibes or Cagnes-sur-Mer nearby.</p></div>
+<div class="day-card"><div class="day-header"><span class="day-num">Days 6-8</span><span class="day-route">📍 Nice / Cagnes-sur-Mer</span></div><div style="margin:.5rem 0"><a href="https://www.google.com/maps/search/best+indian+restaurant+Nice+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Indian restaurants in Nice</a><a href="https://www.google.com/maps/search/indian+restaurant+Cagnes-sur-Mer+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Indian restaurants in Cagnes-sur-Mer</a></div><p style="color:var(--muted);font-size:.85rem;margin-top:.5rem">💡 Nice has a decent selection. Look around Vieux Nice and the port area.</p></div>
+<div class="day-card"><div class="day-header"><span class="day-num">Days 9-10</span><span class="day-route">📍 Aix-en-Provence</span></div><div style="margin:.5rem 0"><a href="https://www.google.com/maps/search/indian+restaurant+Aix-en-Provence+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Indian restaurants in Aix</a></div><p style="color:var(--muted);font-size:.85rem;margin-top:.5rem">💡 A few options in the old town. Two nights here so you can try one.</p></div>
+<div class="day-card"><div class="day-header"><span class="day-num">Day 11</span><span class="day-route">📍 Montpellier</span></div><div style="margin:.5rem 0"><a href="https://www.google.com/maps/search/best+indian+restaurant+Montpellier+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Indian restaurants in Montpellier</a></div><p style="color:var(--muted);font-size:.85rem;margin-top:.5rem">💡 University city — decent variety of international food including Indian.</p></div>
+<div class="day-card"><div class="day-header"><span class="day-num">Day 12</span><span class="day-route">📍 Lyon</span></div><div style="margin:.5rem 0"><a href="https://www.google.com/maps/search/best+indian+restaurant+Lyon+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Indian restaurants in Lyon</a></div><p style="color:var(--muted);font-size:.85rem;margin-top:.5rem">💡 Lyon is France's food capital. Has Indian options BUT strongly recommend trying a Bouchon Lyonnais — unique experience.</p></div>
+<div class="day-card"><div class="day-header"><span class="day-num">Day 13</span><span class="day-route">📍 Dijon</span></div><div style="margin:.5rem 0"><a href="https://www.google.com/maps/search/best+indian+restaurant+Dijon+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Indian restaurants in Dijon</a></div><p style="color:var(--muted);font-size:.85rem;margin-top:.5rem">💡 Several options near Rue de la Liberté.</p></div>
+<div class="day-card"><div class="day-header"><span class="day-num">Day 14</span><span class="day-route">📍 Reims</span></div><div style="margin:.5rem 0"><a href="https://www.google.com/maps/search/indian+restaurant+Reims+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.4rem .8rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.85rem;text-decoration:none;border:1px solid var(--border)">🔍 Indian restaurants in Reims</a></div><p style="color:var(--muted);font-size:.85rem;margin-top:.5rem">💡 A few options. Pair Indian food with champagne? Why not.</p></div>
+</div>
+<div id="enterprise" class="tab">
+<h2 style="margin:1rem 0">🏢 Enterprise Brentford Visit — Tuesday 22 Apr</h2>
+<p style="color:var(--muted);margin-bottom:1rem">Tick off each question as you get an answer.</p>
+<div class="alert-card" style="background:linear-gradient(135deg,#1e3a5f,#1a365d)"><h4 style="color:var(--accent)">🎯 Lead With This</h4>
+<p>"Do you have any hybrid or electric SUVs available for 15 days from 29 Apr?" — the answer shapes everything else.</p></div>
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><h3>🚗 Car Type & Availability</h3><span class="count">4</span></div><div class="checklist"><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Do you have any <strong>hybrid or electric</strong> cars for 15 days, 29 Apr – 16 May?</span></div><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">What specific models? <em>(Need SUV — boot space for dog + luggage)</em></span></div><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Price difference vs standard petrol?</span></div><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">If EV — does it come with a charging cable?</span></div></div></div>
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><h3>🇫🇷 France / European Travel</h3><span class="count">3</span></div><div class="checklist"><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Confirm France is covered under the rental agreement</span></div><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Any additional charge or insurance for France?</span></div><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Is mileage unlimited? <em>(Doing 3,000+ km)</em></span></div></div></div>
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><h3>🦺 Equipment</h3><span class="count">3</span></div><div class="checklist"><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Does the car come with hi-vis vests and warning triangle?</span></div><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Do you offer a European driving kit? How much?</span></div><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Auto-adjusting headlights or need deflectors?</span></div></div></div>
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><h3>📋 Registration & Crit'Air</h3><span class="count">2</span></div><div class="checklist"><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Can you assign my car early so I get the reg number before 29 Apr?</span></div><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Does any car in your fleet already have a Crit'Air sticker?</span></div></div></div>
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><h3>🐕 Dog Policy</h3><span class="count">2</span></div><div class="checklist"><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Is there a pet policy or additional cleaning fee?</span></div><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Any restrictions on dogs in the car?</span></div></div></div>
+<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'"><h3>📅 Practical / Logistics</h3><span class="count">4</span></div><div class="checklist"><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Earliest pickup time on 29 Apr?</span></div><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Latest return time on 16 May? <em>(Arriving back evening)</em></span></div><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">What fuel/charge level to return at?</span></div><div class="check-item"><input type="checkbox" onchange="this.closest('.check-item').classList.toggle('done',this.checked)"><span class="task-text">Insurance excess? Excess waiver available?</span></div></div></div>
+<div class="tip-card" style="margin-top:1.5rem"><h4>📝 Notes</h4>
+<textarea id="enterprise-notes" style="width:100%;min-height:150px;background:var(--bg);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:.8rem;font-family:inherit;font-size:.9rem;resize:vertical" placeholder="Jot down answers here...&#10;&#10;Car model:&#10;Price:&#10;Hybrid/EV available:&#10;Pet fee:&#10;Pickup time:&#10;Return time:" oninput="localStorage.setItem('enterprise-notes',this.value)"></textarea>
+<script>document.getElementById('enterprise-notes').value=localStorage.getItem('enterprise-notes')||'';</script>
+</div></div>
+<div id="routemap" class="tab">
+<h2 style="margin:1rem 0">🗺️ Route Maps & EV Charging Stations</h2>
+
+<div class="tip-card" style="border-left-color:var(--accent)"><h4>📱 Essential Apps — Download Before You Go</h4><ul>
+<li><strong>A Better Route Planner (ABRP)</strong> — enter your exact car model, it plans every charge stop with real-time availability</li>
+<li><strong>Chargemap</strong> — best map of French charging stations, shows real-time status</li>
+<li><strong>Plugsurfing</strong> — single RFID card/app that works at 90% of French chargers</li>
+<li><strong>Google Maps</strong> — download all of France for offline use</li>
+</ul></div>
+
+<div class="alert-card" style="background:linear-gradient(135deg,#1e3a5f,#1a365d)"><h4 style="color:var(--accent)">🔗 Full Trip Route on Google Maps</h4>
+<p><a href="https://www.google.com/maps/dir/Enterprise+Rent-A-Car+Brentford+London/Calais+France/Versailles+France/Beaune+France/Avignon+France/Saint-Paul-de-Vence+France/Cagnes-sur-Mer+France/Aix-en-Provence+France/Montpellier+France/Lyon+France/Dijon+France/Reims+France/Calais+France" target="_blank" style="color:var(--green);font-size:1.1rem;text-decoration:underline">📍 Open Complete Route in Google Maps →</a></p>
+<p style="margin-top:.5rem;font-size:.85rem">Note: Google Maps limits to ~10 waypoints. Open individual day links below for exact routing.</p></div>
+
+<h3 style="margin:1.5rem 0 .8rem">Day-by-Day Routes & Charging Stops</h3>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">Day 1</span>
+<span class="day-route">London → Versailles</span>
+<a href="https://www.google.com/maps/dir/Enterprise+Rent-A-Car+Brentford+London/Calais+France/Rouen+France/Versailles+France" target="_blank" style="background:var(--accent);color:#fff;padding:.3rem .8rem;border-radius:6px;text-decoration:none;font-size:.8rem">📍 Open Route</a></div><div style="margin-top:.6rem"><div style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem">⚡ Charging Stations Along Route</div><a href="https://www.google.com/maps/search/Ionity+charging+Calais+A26" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Ionity Calais (A26)</a><a href="https://www.google.com/maps/search/TotalEnergies+charging+Aire+de+Ressons+A1" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 TotalEnergies Aire de Ressons (A1)</a><a href="https://www.google.com/maps/search/Ionity+charging+near+Chartres+A11" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Ionity Aire de Chartres (A11/A10)</a></div><div style="margin-top:.5rem"><a href="https://chargemap.com/map?q=Versailles+France" target="_blank" style="color:var(--muted);font-size:.8rem;text-decoration:underline">🗺️ View all chargers near Versailles France on Chargemap →</a></div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">Day 2</span>
+<span class="day-route">Versailles → Beaune</span>
+<a href="https://www.google.com/maps/dir/Versailles+France/Beaune+France" target="_blank" style="background:var(--accent);color:#fff;padding:.3rem .8rem;border-radius:6px;text-decoration:none;font-size:.8rem">📍 Open Route</a></div><div style="margin-top:.6rem"><div style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem">⚡ Charging Stations Along Route</div><a href="https://www.google.com/maps/search/Ionity+charging+Aire+de+Venoy+A6" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Ionity Aire de Venoy (A6)</a><a href="https://www.google.com/maps/search/TotalEnergies+charging+Beaune+Tailly+A6" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 TotalEnergies Beaune-Tailly (A6)</a></div><div style="margin-top:.5rem"><a href="https://chargemap.com/map?q=Beaune+France" target="_blank" style="color:var(--muted);font-size:.8rem;text-decoration:underline">🗺️ View all chargers near Beaune France on Chargemap →</a></div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">Day 3</span>
+<span class="day-route">Beaune → Avignon</span>
+<a href="https://www.google.com/maps/dir/Beaune+France/Avignon+France" target="_blank" style="background:var(--accent);color:#fff;padding:.3rem .8rem;border-radius:6px;text-decoration:none;font-size:.8rem">📍 Open Route</a></div><div style="margin-top:.6rem"><div style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem">⚡ Charging Stations Along Route</div><a href="https://www.google.com/maps/search/Ionity+charging+Macon+A6" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Ionity Aire de Mâcon (A6)</a><a href="https://www.google.com/maps/search/TotalEnergies+charging+Valence+A7" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 TotalEnergies Valence (A7)</a><a href="https://www.google.com/maps/search/Ionity+charging+Mornas+A7" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Ionity Aire de Mornas (A7)</a></div><div style="margin-top:.5rem"><a href="https://chargemap.com/map?q=Avignon+France" target="_blank" style="color:var(--muted);font-size:.8rem;text-decoration:underline">🗺️ View all chargers near Avignon France on Chargemap →</a></div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">Day 4</span>
+<span class="day-route">Avignon → St Paul de Vence</span>
+<a href="https://www.google.com/maps/dir/Avignon+France/Saint-Paul-de-Vence+France" target="_blank" style="background:var(--accent);color:#fff;padding:.3rem .8rem;border-radius:6px;text-decoration:none;font-size:.8rem">📍 Open Route</a></div><div style="margin-top:.6rem"><div style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem">⚡ Charging Stations Along Route</div><a href="https://www.google.com/maps/search/Ionity+charging+Lancon+A7" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Ionity Aire de Lançon (A7)</a><a href="https://www.google.com/maps/search/TotalEnergies+charging+Frejus+A8" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 TotalEnergies Fréjus (A8)</a><a href="https://www.google.com/maps/search/Ionity+charging+Vidauban+A8" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Ionity Aire de Vidauban (A8)</a></div><div style="margin-top:.5rem"><a href="https://chargemap.com/map?q=Saint-Paul-de-Vence+France" target="_blank" style="color:var(--muted);font-size:.8rem;text-decoration:underline">🗺️ View all chargers near Saint-Paul-de-Vence France on Chargemap →</a></div></div>
+<div class="day-card" style="border-left-color:var(--green)">
+<div class="day-header">
+<span class="day-num">Days 5-7</span>
+<span class="day-route">St Paul de Vence / Nice area</span></div><div style="margin-top:.6rem"><div style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem">⚡ Charging Stations Along Route</div><a href="https://www.google.com/maps/search/EV+charging+station+Cagnes-sur-Mer" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Public chargers Cagnes-sur-Mer</a><a href="https://www.google.com/maps/search/EV+charging+station+Nice+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Public chargers Nice</a><a href="https://www.google.com/maps/search/Tesla+Supercharger+Nice+France" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Tesla Supercharger Nice</a></div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">Day 8</span>
+<span class="day-route">Nice → Aix-en-Provence</span>
+<a href="https://www.google.com/maps/dir/Cagnes-sur-Mer+France/Aix-en-Provence+France" target="_blank" style="background:var(--accent);color:#fff;padding:.3rem .8rem;border-radius:6px;text-decoration:none;font-size:.8rem">📍 Open Route</a></div><div style="margin-top:.6rem"><div style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem">⚡ Charging Stations Along Route</div><a href="https://www.google.com/maps/search/Ionity+charging+Brignoles+A8" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Ionity Aire de Brignoles (A8)</a><a href="https://www.google.com/maps/search/EV+charging+station+Aix-en-Provence" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Public chargers Aix-en-Provence</a></div><div style="margin-top:.5rem"><a href="https://chargemap.com/map?q=Aix-en-Provence+France" target="_blank" style="color:var(--muted);font-size:.8rem;text-decoration:underline">🗺️ View all chargers near Aix-en-Provence France on Chargemap →</a></div></div>
+<div class="day-card" style="border-left-color:var(--green)">
+<div class="day-header">
+<span class="day-num">Days 9-10</span>
+<span class="day-route">Stay in Aix-en-Provence</span></div><div style="margin-top:.6rem"><div style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem">⚡ Charging Stations Along Route</div><a href="https://www.google.com/maps/search/EV+charging+station+Aix-en-Provence+centre" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Public chargers Aix centre</a><a href="https://www.google.com/maps/search/Tesla+Supercharger+Aix-en-Provence" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Tesla Supercharger Aix</a></div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">Day 11</span>
+<span class="day-route">Aix → Montpellier</span>
+<a href="https://www.google.com/maps/dir/Aix-en-Provence+France/Montpellier+France" target="_blank" style="background:var(--accent);color:#fff;padding:.3rem .8rem;border-radius:6px;text-decoration:none;font-size:.8rem">📍 Open Route</a></div><div style="margin-top:.6rem"><div style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem">⚡ Charging Stations Along Route</div><a href="https://www.google.com/maps/search/EV+charging+station+Place+de+la+Comedie+Montpellier" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Public chargers Montpellier Comédie</a></div><div style="margin-top:.5rem"><a href="https://chargemap.com/map?q=Montpellier+France" target="_blank" style="color:var(--muted);font-size:.8rem;text-decoration:underline">🗺️ View all chargers near Montpellier France on Chargemap →</a></div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">Day 12</span>
+<span class="day-route">Montpellier → Lyon</span>
+<a href="https://www.google.com/maps/dir/Montpellier+France/Hotel+Le+College+Lyon+France" target="_blank" style="background:var(--accent);color:#fff;padding:.3rem .8rem;border-radius:6px;text-decoration:none;font-size:.8rem">📍 Open Route</a></div><div style="margin-top:.6rem"><div style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem">⚡ Charging Stations Along Route</div><a href="https://www.google.com/maps/search/Ionity+charging+Montelimar+A7" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Ionity Aire de Montélimar (A7)</a><a href="https://www.google.com/maps/search/EV+charging+station+Vieux+Lyon" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Public chargers Lyon Vieux Lyon</a></div><div style="margin-top:.5rem"><a href="https://chargemap.com/map?q=Hotel+Le+College+Lyon+France" target="_blank" style="color:var(--muted);font-size:.8rem;text-decoration:underline">🗺️ View all chargers near Hotel Le College Lyon France on Chargemap →</a></div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">Day 13</span>
+<span class="day-route">Lyon → Dijon</span>
+<a href="https://www.google.com/maps/dir/Lyon+France/Chalon-sur-Saone+France/Dijon+France" target="_blank" style="background:var(--accent);color:#fff;padding:.3rem .8rem;border-radius:6px;text-decoration:none;font-size:.8rem">📍 Open Route</a></div><div style="margin-top:.6rem"><div style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem">⚡ Charging Stations Along Route</div><a href="https://www.google.com/maps/search/Ionity+charging+Macon+A6" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Ionity Aire de Mâcon (A6)</a><a href="https://www.google.com/maps/search/TotalEnergies+charging+Chalon+sur+Saone+A6" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 TotalEnergies Chalon-sur-Saône (A6)</a><a href="https://www.google.com/maps/search/EV+charging+station+Dijon+centre" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Public chargers Dijon</a></div><div style="margin-top:.5rem"><a href="https://chargemap.com/map?q=Dijon+France" target="_blank" style="color:var(--muted);font-size:.8rem;text-decoration:underline">🗺️ View all chargers near Dijon France on Chargemap →</a></div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">Day 14</span>
+<span class="day-route">Dijon → Reims</span>
+<a href="https://www.google.com/maps/dir/Dijon+France/Reims+France" target="_blank" style="background:var(--accent);color:#fff;padding:.3rem .8rem;border-radius:6px;text-decoration:none;font-size:.8rem">📍 Open Route</a></div><div style="margin-top:.6rem"><div style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem">⚡ Charging Stations Along Route</div><a href="https://www.google.com/maps/search/Ionity+charging+Langres+A31" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Ionity Aire de Langres (A31)</a><a href="https://www.google.com/maps/search/TotalEnergies+charging+Troyes+A26" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 TotalEnergies near Troyes (A26)</a></div><div style="margin-top:.5rem"><a href="https://chargemap.com/map?q=Reims+France" target="_blank" style="color:var(--muted);font-size:.8rem;text-decoration:underline">🗺️ View all chargers near Reims France on Chargemap →</a></div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">Day 15</span>
+<span class="day-route">Reims → Calais → London</span>
+<a href="https://www.google.com/maps/dir/Reims+France/Calais+France/Enterprise+Rent-A-Car+Brentford+London+UK" target="_blank" style="background:var(--accent);color:#fff;padding:.3rem .8rem;border-radius:6px;text-decoration:none;font-size:.8rem">📍 Open Route</a></div><div style="margin-top:.6rem"><div style="color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.5px;margin-bottom:.4rem">⚡ Charging Stations Along Route</div><a href="https://www.google.com/maps/search/Ionity+charging+Saint+Hilaire+A26" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 Ionity Aire de Saint-Hilaire (A26)</a><a href="https://www.google.com/maps/search/EV+charging+station+Calais+Eurotunnel" target="_blank" style="display:inline-block;background:var(--bg);color:var(--green);padding:.3rem .7rem;border-radius:6px;margin:.2rem .3rem .2rem 0;font-size:.8rem;text-decoration:none;border:1px solid var(--border)">🔌 TotalEnergies Calais (pre-tunnel)</a></div><div style="margin-top:.5rem"><a href="https://chargemap.com/map?q=Enterprise+Rent-A-Car+Brentford+London" target="_blank" style="color:var(--muted);font-size:.8rem;text-decoration:underline">🗺️ View all chargers near Enterprise Rent-A-Car Brentford London on Chargemap →</a></div></div>
+
+<h3 style="margin:1.5rem 0 .8rem">🔌 Charging Networks You'll Use</h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem">
+<div class="tip-card"><h4>Ionity</h4><ul><li>350kW ultra-fast (10-80% in 20 min)</li><li>Found at most motorway Aires</li><li>€0.39-0.69/kWh (or €5.99/month for €0.35/kWh)</li><li><a href="https://ionity.eu/en/network/map" target="_blank" style="color:var(--accent)">Ionity Map →</a></li></ul></div>
+<div class="tip-card"><h4>TotalEnergies</h4><ul><li>175-350kW fast charging</li><li>Common at TotalEnergies petrol stations</li><li>€0.40-0.60/kWh</li><li><a href="https://www.totalenergies.fr/particuliers/nos-services/recharge-vehicule-electrique" target="_blank" style="color:var(--accent)">TotalEnergies Map →</a></li></ul></div>
+<div class="tip-card"><h4>Tesla Supercharger</h4><ul><li>Now open to non-Tesla (CCS)</li><li>250kW, very reliable</li><li>€0.40-0.55/kWh via Tesla app</li><li><a href="https://www.tesla.com/en_gb/findus?v=2&bounds=51.5,-1,43,8&filters=supercharger" target="_blank" style="color:var(--accent)">Tesla Map →</a></li></ul></div>
+<div class="tip-card"><h4>Plugsurfing / Chargemap</h4><ul><li>Roaming cards — one card, many networks</li><li>Order RFID card before trip (~£20)</li><li>Works at 90% of French chargers</li><li><a href="https://chargemap.com/map" target="_blank" style="color:var(--accent)">Chargemap →</a></li></ul></div>
+</div>
+
+<div class="tip-card" style="margin-top:1.5rem;border-left-color:var(--orange)"><h4>⚠️ Important EV Charging Tips</h4><ul>
+<li>Always have a backup station in mind — chargers can be out of service</li>
+<li>Charge to 80% max on fast chargers (80-100% is very slow)</li>
+<li>Drive at 110-120 km/h instead of 130 to gain 15-20% more range</li>
+<li>Pre-condition battery before arriving at charger (most EVs do this via nav)</li>
+<li>Carry the car's included charging cable — some Airbnbs have regular plugs you can trickle-charge from overnight</li>
+<li>French motorway chargers accept contactless card, but an RFID card is faster</li>
+</ul></div>
+
+</div>
+<div id="ev" class="tab">
+<h2 style="margin:1rem 0">⚡ Electric Car Option — Full Analysis</h2>
+
+<div class="tip-card" style="border-left-color:var(--accent)"><h4>Why Consider EV?</h4>
+<p>An electric car is automatically Crit'Air 0 — exempt from ALL French Low Emission Zones. No sticker needed, no fines, no stress. Drive freely through Paris, Nice, Lyon, Montpellier.</p></div>
+
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin:1rem 0">
+<div style="background:var(--card);border-radius:12px;padding:1.2rem;border-top:4px solid var(--green)">
+<h3 style="color:var(--green);margin-bottom:.8rem">✅ Pros</h3>
+<ul style="color:var(--muted);font-size:.85rem;margin-left:1rem">
+<li>Zero LEZ risk — drive anywhere freely</li>
+<li>Fuel cost: ~£80-120 vs £250-350 petrol</li>
+<li>Charging stops = forced rest breaks (good for solo driver!)</li>
+<li>Quieter, smoother motorway driving = less fatigue</li>
+<li>Regenerative braking on mountain/coastal roads</li>
+<li>No Crit'Air sticker hassle at all</li>
+<li>French motorway charging is good on your A6/A7/A8 route</li>
+</ul>
+</div>
+<div style="background:var(--card);border-radius:12px;padding:1.2rem;border-top:4px solid var(--orange)">
+<h3 style="color:var(--orange);margin-bottom:.8rem">⚠️ Cons</h3>
+<ul style="color:var(--muted);font-size:.85rem;margin-left:1rem">
+<li>Rental costs ~£10-20/day more (~£150-300 extra total)</li>
+<li>Charging adds 30-80 min on long drive days</li>
+<li>Need to plan charging stops (download ABRP app)</li>
+<li>Some Airbnbs may not have charging — need public chargers</li>
+<li>Motorway speed (130 km/h) drains battery faster</li>
+<li>Range anxiety on Day 1 (456 km) and Day 13 (487 km)</li>
+<li>If charger is broken/busy, you wait</li>
+</ul>
+</div>
+</div>
+
+<h3 style="margin:1.5rem 0 .8rem;color:var(--accent)">💰 Cost Comparison</h3>
+<table class="budget-table">
+<thead><tr><th>Item</th><th>Petrol Car</th><th>Electric Car</th></tr></thead>
+<tbody>
+<tr><td>Rental premium (15 days)</td><td>Baseline</td><td>+£150-300</td></tr>
+<tr><td>Fuel / Charging</td><td>£250-350</td><td>£80-120</td></tr>
+<tr><td>Crit'Air fines (realistic)</td><td>£0-400</td><td>£0</td></tr>
+<tr><td>Enterprise fine admin fees</td><td>£0-160</td><td>£0</td></tr>
+<tr style="border-top:2px solid var(--accent)">
+<td style="font-weight:700">Net difference</td>
+<td style="font-weight:700;color:var(--orange)">£250-910</td>
+<td style="font-weight:700;color:var(--green)">£230-420</td></tr>
+</tbody>
+</table>
+<p style="color:var(--muted);font-size:.85rem;margin-top:.5rem">EV is £0-490 cheaper when you factor in potential LEZ fines. Even without fines, the fuel saving nearly covers the rental premium.</p>
+
+<h3 style="margin:1.5rem 0 .8rem;color:var(--accent)">🗺️ Day-by-Day EV Charging Plan</h3>
+<div class="day-card" style="border-left-color:var(--orange)">
+<div class="day-header">
+<span class="day-num">⚡ Day 1</span>
+<span class="day-route">London → Versailles</span>
+<span class="day-date">456 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>5-6</div>
+<div><div class="label">⚡ EV time (inc charging)</div>6.5-7.5</div>
+<div><div class="label">🔌 Charge stops</div>2 stops (~40 min each)</div>
+<div><div class="label">📝 Notes</div>Longest day. Charge after Eurotunnel at Calais Ionity, then again near Rouen. Arrive with ~30% battery.</div>
+</div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">🔌 Day 2</span>
+<span class="day-route">Paris → Beaune</span>
+<span class="day-date">310 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>2h40</div>
+<div><div class="label">⚡ EV time (inc charging)</div>3-3.5</div>
+<div><div class="label">🔌 Charge stops</div>1 stop (~30 min)</div>
+<div><div class="label">📝 Notes</div>A6 south. Ionity/TotalEnergies stations at Beaune-Tailly aire. Easy.</div>
+</div></div>
+<div class="day-card" style="border-left-color:var(--orange)">
+<div class="day-header">
+<span class="day-num">⚡ Day 3</span>
+<span class="day-route">Beaune → Avignon</span>
+<span class="day-date">453 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>4</div>
+<div><div class="label">⚡ EV time (inc charging)</div>5-5.5</div>
+<div><div class="label">🔌 Charge stops</div>2 stops (~35 min each)</div>
+<div><div class="label">📝 Notes</div>A6→A7 Rhône corridor. Well-served. Charge near Valence + before Avignon.</div>
+</div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">🔌 Day 4</span>
+<span class="day-route">Avignon → St Paul de Vence</span>
+<span class="day-date">344 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>3h10</div>
+<div><div class="label">⚡ EV time (inc charging)</div>3.5-4</div>
+<div><div class="label">🔌 Charge stops</div>1 stop (~30 min)</div>
+<div><div class="label">📝 Notes</div>A8 coastal. Charge near Aix or Fréjus. Slightly fewer stations on A8 but manageable.</div>
+</div></div>
+<div class="day-card" style="border-left-color:var(--green)">
+<div class="day-header">
+<span class="day-num">🔋 Day 5</span>
+<span class="day-route">Stay in St Paul de Vence</span>
+<span class="day-date">0 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>—</div>
+<div><div class="label">⚡ EV time (inc charging)</div>—</div>
+<div><div class="label">🔌 Charge stops</div>Charge overnight if Airbnb has plug, or find local charger</div>
+<div><div class="label">📝 Notes</div>Rest day. Top up at local charger or destination charger.</div>
+</div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">🔌 Day 6</span>
+<span class="day-route">St Paul → Cagnes-sur-Mer</span>
+<span class="day-date">10 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>15 min</div>
+<div><div class="label">⚡ EV time (inc charging)</div>15 min</div>
+<div><div class="label">🔌 Charge stops</div>None needed</div>
+<div><div class="label">📝 Notes</div>Tiny move. No charging needed.</div>
+</div></div>
+<div class="day-card" style="border-left-color:var(--green)">
+<div class="day-header">
+<span class="day-num">🔋 Day 7</span>
+<span class="day-route">Stay in Nice area</span>
+<span class="day-date">0 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>—</div>
+<div><div class="label">⚡ EV time (inc charging)</div>—</div>
+<div><div class="label">🔌 Charge stops</div>Find local charger in Cagnes-sur-Mer</div>
+<div><div class="label">📝 Notes</div>Rest day. Plenty of public chargers along the coast.</div>
+</div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">🔌 Day 8</span>
+<span class="day-route">Nice → Aix-en-Provence</span>
+<span class="day-date">195 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>2</div>
+<div><div class="label">⚡ EV time (inc charging)</div>2-2.5</div>
+<div><div class="label">🔌 Charge stops</div>None or 1 quick top-up</div>
+<div><div class="label">📝 Notes</div>Short hop. Single charge range easily.</div>
+</div></div>
+<div class="day-card" style="border-left-color:var(--green)">
+<div class="day-header">
+<span class="day-num">🔋 Day 9</span>
+<span class="day-route">Stay in Aix</span>
+<span class="day-date">0 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>—</div>
+<div><div class="label">⚡ EV time (inc charging)</div>—</div>
+<div><div class="label">🔌 Charge stops</div>Hotel may have charger, or use public</div>
+<div><div class="label">📝 Notes</div>Rest day. Charge up for next day.</div>
+</div></div>
+<div class="day-card" style="border-left-color:var(--green)">
+<div class="day-header">
+<span class="day-num">🔋 Day 10</span>
+<span class="day-route">Stay in Aix</span>
+<span class="day-date">0 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>—</div>
+<div><div class="label">⚡ EV time (inc charging)</div>—</div>
+<div><div class="label">🔌 Charge stops</div>—</div>
+<div><div class="label">📝 Notes</div>Second rest day.</div>
+</div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">🔌 Day 11</span>
+<span class="day-route">Aix → Montpellier</span>
+<span class="day-date">91 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>1</div>
+<div><div class="label">⚡ EV time (inc charging)</div>1</div>
+<div><div class="label">🔌 Charge stops</div>None needed</div>
+<div><div class="label">📝 Notes</div>Tiny drive. No charge needed.</div>
+</div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">🔌 Day 12</span>
+<span class="day-route">Montpellier → Lyon</span>
+<span class="day-date">228 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>2h10</div>
+<div><div class="label">⚡ EV time (inc charging)</div>2.5-3</div>
+<div><div class="label">🔌 Charge stops</div>1 stop (~25 min) or none if full</div>
+<div><div class="label">📝 Notes</div>A9→A7 north. Could make it on a full charge in most EVs.</div>
+</div></div>
+<div class="day-card" style="border-left-color:var(--orange)">
+<div class="day-header">
+<span class="day-num">⚡ Day 13</span>
+<span class="day-route">Lyon → Dijon</span>
+<span class="day-date">487 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>4h30</div>
+<div><div class="label">⚡ EV time (inc charging)</div>5.5-6</div>
+<div><div class="label">🔌 Charge stops</div>2 stops (~35 min each)</div>
+<div><div class="label">📝 Notes</div>Longest drive of return leg. A6 north. Charge at Chalon-sur-Saône + Beaune area.</div>
+</div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">🔌 Day 14</span>
+<span class="day-route">Dijon → Reims</span>
+<span class="day-date">220 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>2h30</div>
+<div><div class="label">⚡ EV time (inc charging)</div>2.5-3</div>
+<div><div class="label">🔌 Charge stops</div>1 stop (~25 min) or none</div>
+<div><div class="label">📝 Notes</div>A31→A26. Comfortable single charge range.</div>
+</div></div>
+<div class="day-card" style="border-left-color:var(--accent)">
+<div class="day-header">
+<span class="day-num">🔌 Day 15</span>
+<span class="day-route">Reims → London</span>
+<span class="day-date">170 km</span>
+</div>
+<div class="day-details">
+<div><div class="label">⛽ Petrol time</div>3-4 (inc tunnel)</div>
+<div><div class="label">⚡ EV time (inc charging)</div>3.5-4.5</div>
+<div><div class="label">🔌 Charge stops</div>1 stop before tunnel (~20 min)</div>
+<div><div class="label">📝 Notes</div>Charge near Calais before Eurotunnel. Short drive after tunnel to Brentford.</div>
+</div></div>
+
+<h3 style="margin:1.5rem 0 .8rem;color:var(--accent)">🚗 Likely Rental EVs from Enterprise</h3>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1rem">
+<div class="tip-card"><h4>Tesla Model 3</h4><ul><li>Range: 270-340 miles (WLTP)</li><li>Real motorway range: ~220-280 miles</li><li>Tesla Supercharger network + CCS</li><li>Best charging network access</li><li>Dog fits in boot easily</li></ul></div>
+<div class="tip-card"><h4>Polestar 2</h4><ul><li>Range: 250-335 miles (WLTP)</li><li>Real motorway range: ~200-260 miles</li><li>CCS charging</li><li>Comfortable for long drives</li><li>Good boot space</li></ul></div>
+<div class="tip-card"><h4>VW ID.4 / ID.5</h4><ul><li>Range: 250-320 miles (WLTP)</li><li>Real motorway range: ~200-250 miles</li><li>CCS charging</li><li>SUV — most space for dog + luggage</li><li>Higher driving position (easier for long drives)</li></ul></div>
+</div>
+
+<div class="alert-card" style="margin-top:1.5rem;background:linear-gradient(135deg,#1e3a5f,#1a365d)">
+<h4 style="color:var(--accent)">📋 If You Go EV — Action Items</h4>
+<p style="color:var(--text)">
+1. Call Enterprise Brentford — ask what EVs available 2-16 May, get price<br>
+2. Download <strong>A Better Route Planner (ABRP)</strong> app — enter the exact car model, it plans every charge stop<br>
+3. Get a <strong>Chargemap</strong> or <strong>Plugsurfing</strong> RFID card (£20) — works at 90% of French chargers<br>
+4. Check each Airbnb/hotel: do they have EV charging or a plug you can use?<br>
+5. Always charge to 80% (fastest), plan to arrive at each stop with 15-20% minimum<br>
+6. Drive at 110-120 km/h instead of 130 to extend range by 15-20%
+</p></div>
+
+<div class="tip-card" style="margin-top:1rem"><h4>🎯 Verdict</h4>
+<p>For YOUR specific trip — solo driver, dog in the car, driving through 4 LEZ cities, 15 days — an EV is genuinely the smarter choice. The charging stops force you to rest (which you need), the LEZ problem vanishes, and the total cost is likely the same or less than petrol + fines. The only question is whether Enterprise has one available.</p></div>
+
+</div>
+</div>
+
+<script>
+const tripData = {"itinerary": [{"day": 1, "date": "Sat 2 May", "route": "London \u2192 Versailles", "drive": "5-6 hrs (456 km)", "stay": "Ibis Budget Porte d'Italie", "cost": "\u00a371", "notes": "Early start from Enterprise Brentford. Eurotunnel to Calais, then A26/A1 to Paris area. Park near hotel.", "highlights": ["Palace of Versailles gardens (free entry to gardens)", "Evening walk around Versailles town", "Quick stop at a boulangerie for croissants"]}, {"day": 2, "date": "Sun 3 May", "route": "Paris \u2192 Beaune", "drive": "2h 40m (310 km)", "stay": "Airbnb in Beaune", "cost": "\u00a3104", "notes": "Morning in Versailles/Paris, then A6 south through Burgundy.", "highlights": ["Beaune's Hospices de Beaune (H\u00f4tel-Dieu)", "Wine tasting in Burgundy vineyards", "Walk the medieval ramparts"]}, {"day": 3, "date": "Mon 4 May", "route": "Beaune \u2192 Avignon", "drive": "4 hrs (453 km)", "stay": "Airbnb in Avignon", "cost": "\u00a3107", "notes": "A6 south then A7 'Autoroute du Soleil'. Cancel deadline: 3rd May.", "highlights": ["Pont d'Avignon", "Palais des Papes", "Walk the old town streets"]}, {"day": 4, "date": "Tue 5 May", "route": "Avignon \u2192 St Paul de Vence", "drive": "3h 10m (344 km)", "stay": "Airbnb in St Paul de Vence", "cost": "\u00a3254", "notes": "Park outside ramparts, walk up Rue Grande. Cancel deadline: 30th April.", "highlights": ["\u00c8ze village & exotic garden", "Perfume factory in Grasse (detour)", "St Paul de Vence medieval village"]}, {"day": 5, "date": "Wed 6 May", "route": "Stay in St Paul de Vence", "drive": "\u2014", "stay": "Same Airbnb", "cost": "incl.", "notes": "Rest day - no driving!", "highlights": ["Fondation Maeght art museum", "Local markets", "Dog-friendly coastal walk at Cagnes-sur-Mer beach"]}, {"day": 6, "date": "Thu 7 May", "route": "St Paul de Vence \u2192 Nice area", "drive": "Short", "stay": "Airbnb Cagnes-sur-Mer", "cost": "\u00a3533 (3 nights)", "notes": "Short move to Nice/Cagnes-sur-Mer area.", "highlights": ["Promenade des Anglais", "Old Nice (Vieux Nice)", "Castle Hill viewpoint"]}, {"day": 7, "date": "Fri 8 May", "route": "Stay in Nice", "drive": "\u2014", "stay": "Same", "cost": "incl.", "notes": "VE Day public holiday in France - some shops may close. Cancel deadline: 7th April.", "highlights": ["Cours Saleya flower market", "Nice Cathedral", "Beach day with the dog"]}, {"day": 8, "date": "Sat 9 May", "route": "Nice \u2192 Aix-en-Provence", "drive": "2 hrs (195 km)", "stay": "Transit/Aix", "cost": "\u2014", "notes": "Coastal A8 motorway west.", "highlights": ["Cassis calanques (detour)", "Aix old town arrival walk", "Cours Mirabeau boulevard"]}, {"day": 9, "date": "Sun 10 May", "route": "Stay in Aix", "drive": "\u2014", "stay": "Atrium d'Ana\u00efte Hotel", "cost": "\u00a3139 (2 nights)", "notes": "Rest and explore day.", "highlights": ["C\u00e9zanne's studio", "Aix markets (Sunday morning)", "Thermal baths area"]}, {"day": 10, "date": "Mon 11 May", "route": "Stay in Aix", "drive": "\u2014", "stay": "Same hotel", "cost": "incl.", "notes": "Another relaxed day.", "highlights": ["Day trip to Luberon villages", "Lavender fields (early season)", "Local Proven\u00e7al cooking"]}, {"day": 11, "date": "Tue 12 May", "route": "Aix \u2192 Montpellier", "drive": "1 hr (91 km)", "stay": "Airbnb Montpellier", "cost": "\u00a381", "notes": "Park at Com\u00e9die car park (5 min walk). Cancel deadline: 7th May.", "highlights": ["Place de la Com\u00e9die", "Antigone district", "Montpellier Cathedral"]}, {"day": 12, "date": "Wed 13 May", "route": "Montpellier \u2192 Lyon", "drive": "2h 10m (228 km)", "stay": "H\u00f4tel Le Coll\u00e8ge, Lyon", "cost": "\u00a3129", "notes": "VET VISIT for dog tapeworm treatment needed. Check veterinaire-fermaud.fr", "highlights": ["Vieux Lyon (Old Lyon UNESCO site)", "Traboules (secret passageways)", "Lyon food scene - Bouchon Lyonnais dinner"]}, {"day": 13, "date": "Thu 14 May", "route": "Lyon \u2192 Dijon", "drive": "4h 30m (487 km)", "stay": "Airbnb Dijon", "cost": "\u00a3107", "notes": "Tr\u00e9mouille car park ~\u20ac11/24hrs or free on Blvd Voltaire (15 min walk). Cancel: 9th May. VET CHECK if not done in Lyon.", "highlights": ["Dijon mustard shops", "Ducal Palace", "Rue de la Libert\u00e9 shopping"]}, {"day": 14, "date": "Fri 15 May", "route": "Dijon \u2192 Reims", "drive": "2h 30m (220 km)", "stay": "Airbnb Reims", "cost": "\u00a3107", "notes": "Park in front of house to unload, car park 200m away. Cancel: 10th May.", "highlights": ["Reims Cathedral", "Champagne house tour (Taittinger/Veuve Clicquot)", "Buy champagne to take home!"]}, {"day": 15, "date": "Sat 16 May", "route": "Reims \u2192 London", "drive": "3-4 hrs to Calais + tunnel", "stay": "Home!", "cost": "Free", "notes": "A26 to Calais, Eurotunnel back. Return car to Enterprise Brentford.", "highlights": ["Morning croissant in Reims", "Duty free at Calais", "Home sweet home"]}], "preTripTasks": [{"category": "Documents", "items": [{"task": "Passports (both) - valid 3+ months beyond travel", "deadline": "Now", "done": false}, {"task": "Schengen visas - confirm validity covers 2-16 May 2026", "deadline": "Now", "done": false}, {"task": "UK Skilled Worker visa BRP cards", "deadline": "Now", "done": false}, {"task": "Printed hotel/Airbnb confirmations (offline backup)", "deadline": "30 Apr", "done": false}, {"task": "Travel insurance policy (covers France, driving, dog)", "deadline": "25 Apr", "done": false}, {"task": "EHIC/GHIC cards (or travel health insurance)", "deadline": "Now", "done": false}, {"task": "Eurotunnel booking confirmations (both ways)", "deadline": "25 Apr", "done": false}, {"task": "Enterprise rental agreement & confirmation", "deadline": "30 Apr", "done": false}, {"task": "International Driving Permit (IDP) - get from Post Office", "deadline": "25 Apr", "done": false}, {"task": "Photocopies of all documents (separate from originals)", "deadline": "1 May", "done": false}]}, {"category": "Dog Documents", "items": [{"task": "Animal Health Certificate (AHC) from vet - valid 10 days before travel", "deadline": "22 Apr", "done": false}, {"task": "Microchip number recorded", "deadline": "Now", "done": false}, {"task": "Rabies vaccination certificate (must be 21+ days before travel)", "deadline": "Check now", "done": false}, {"task": "Book tapeworm treatment in France (Lyon/Montpellier) 1-5 days before UK return", "deadline": "This week", "done": false}, {"task": "Pet passport or AHC for return to UK", "deadline": "22 Apr", "done": false}, {"task": "Dog travel crate/harness for car (French law requires restrained)", "deadline": "25 Apr", "done": false}]}, {"category": "Car & Driving", "items": [{"task": "Confirm Enterprise Brentford pickup time (early morning 2 May)", "deadline": "25 Apr", "done": false}, {"task": "Check rental includes France/EU coverage", "deadline": "Now", "done": false}, {"task": "Crit'Air vignette - ask Enterprise if car has one, otherwise order online 29 Apr + keep PDF", "deadline": "Order NOW (takes 1-2 weeks)", "done": false}, {"task": "French motorway toll tag (Bip&Go or Ulys) or budget cash/card for tolls", "deadline": "25 Apr", "done": false}, {"task": "GB sticker (if car doesn't have UK plates with GB)", "deadline": "25 Apr", "done": false}, {"task": "Headlight beam deflectors (or check if car has auto-adjust)", "deadline": "1 May", "done": false}, {"task": "Hi-vis vest x2 (French legal requirement - must be IN the car, not boot)", "deadline": "25 Apr", "done": false}, {"task": "Warning triangle (French legal requirement)", "deadline": "25 Apr", "done": false}, {"task": "Breathalyser kit (recommended, was mandatory)", "deadline": "25 Apr", "done": false}, {"task": "Check spare tyre/inflation kit in rental", "deadline": "2 May", "done": false}, {"task": "Download offline Google Maps for all of France", "deadline": "1 May", "done": false}, {"task": "Car phone mount", "deadline": "25 Apr", "done": false}, {"task": "12V car charger with USB-C", "deadline": "25 Apr", "done": false}]}, {"category": "Packing - Clothes (May in South France: 18-25\u00b0C)", "items": [{"task": "Light layers - 5x t-shirts/tops each", "deadline": "1 May", "done": false}, {"task": "2x light jumpers/cardigans (evenings can be cool)", "deadline": "1 May", "done": false}, {"task": "1x light waterproof jacket each", "deadline": "1 May", "done": false}, {"task": "3x shorts/light trousers each", "deadline": "1 May", "done": false}, {"task": "1x smart casual outfit each (nice dinners)", "deadline": "1 May", "done": false}, {"task": "Comfortable walking shoes (cobblestones!)", "deadline": "1 May", "done": false}, {"task": "Sandals/flip-flops", "deadline": "1 May", "done": false}, {"task": "Swimwear (Nice beach!)", "deadline": "1 May", "done": false}, {"task": "Sunhat & sunglasses", "deadline": "1 May", "done": false}, {"task": "7x underwear & socks each", "deadline": "1 May", "done": false}, {"task": "Sleepwear", "deadline": "1 May", "done": false}]}, {"category": "Packing - Essentials", "items": [{"task": "Toiletries bag (sunscreen SPF50, aftersun, insect repellent)", "deadline": "1 May", "done": false}, {"task": "Medications + basic first aid kit", "deadline": "1 May", "done": false}, {"task": "EU/French power adapter (Type C/E plugs)", "deadline": "25 Apr", "done": false}, {"task": "Multi-USB charger + cables", "deadline": "1 May", "done": false}, {"task": "Power bank (long drives)", "deadline": "1 May", "done": false}, {"task": "Reusable water bottles x2", "deadline": "1 May", "done": false}, {"task": "Snacks for the road (Indian snacks from local shop!)", "deadline": "1 May", "done": false}, {"task": "Travel pillow & blanket (passenger comfort)", "deadline": "1 May", "done": false}, {"task": "Wet wipes & tissues", "deadline": "1 May", "done": false}, {"task": "Tote bags for shopping/markets", "deadline": "1 May", "done": false}, {"task": "Small daypack/backpack for walks", "deadline": "1 May", "done": false}, {"task": "Umbrella (compact)", "deadline": "1 May", "done": false}]}, {"category": "Packing - Dog Supplies", "items": [{"task": "Dog food (enough for 15 days or plan to buy in France)", "deadline": "1 May", "done": false}, {"task": "Collapsible water/food bowls", "deadline": "25 Apr", "done": false}, {"task": "Dog lead, harness, poo bags", "deadline": "1 May", "done": false}, {"task": "Dog bed/blanket for car and accommodation", "deadline": "1 May", "done": false}, {"task": "Dog towel (beach/rain)", "deadline": "1 May", "done": false}, {"task": "Favourite toy for comfort", "deadline": "1 May", "done": false}, {"task": "Dog tick/flea treatment (ticks common in South France)", "deadline": "28 Apr", "done": false}, {"task": "Dog first aid basics", "deadline": "1 May", "done": false}]}, {"category": "Things to Buy Before Trip", "items": [{"task": "Crit'Air vignette - order from certificat-air.gouv.fr (~\u20ac4.61)", "deadline": "ORDER NOW", "done": false}, {"task": "Hi-vis vests x2 (Halfords ~\u00a35)", "deadline": "25 Apr", "done": false}, {"task": "Warning triangle (Halfords ~\u00a38)", "deadline": "25 Apr", "done": false}, {"task": "EU power adapters x2 (Amazon ~\u00a38)", "deadline": "25 Apr", "done": false}, {"task": "Headlight deflectors (Halfords ~\u00a35)", "deadline": "25 Apr", "done": false}, {"task": "Car phone mount (Amazon ~\u00a312)", "deadline": "25 Apr", "done": false}, {"task": "Dog car harness/seatbelt (Amazon ~\u00a315)", "deadline": "25 Apr", "done": false}, {"task": "Collapsible dog bowls (Amazon ~\u00a38)", "deadline": "25 Apr", "done": false}, {"task": "Sunscreen SPF50 (Boots)", "deadline": "28 Apr", "done": false}, {"task": "French phrasebook or download Google Translate French offline", "deadline": "1 May", "done": false}, {"task": "Road snacks & car entertainment (podcasts/playlists)", "deadline": "1 May", "done": false}]}, {"category": "Driving Tips & Safety", "items": [{"task": "Remember: Drive on the RIGHT in France!", "deadline": "\u2014", "done": false}, {"task": "Speed limits: 130 km/h motorway, 80 km/h rural, 50 km/h town", "deadline": "\u2014", "done": false}, {"task": "Priorit\u00e9 \u00e0 droite - give way to right at unmarked junctions", "deadline": "\u2014", "done": false}, {"task": "Tolls: budget ~\u20ac200-300 total for motorway tolls", "deadline": "\u2014", "done": false}, {"task": "Fuel: budget ~\u20ac250-350 for petrol over 3,000+ km", "deadline": "\u2014", "done": false}, {"task": "Take breaks every 90 mins - you are the SOLE driver for 3,000+ km", "deadline": "\u2014", "done": false}, {"task": "Avoid driving in Paris city centre (use p\u00e9riph\u00e9rique)", "deadline": "\u2014", "done": false}, {"task": "Download Waze app (better than Google Maps for French roads/speed cameras)", "deadline": "1 May", "done": false}]}, {"category": "Budget Estimates", "items": [{"task": "Accommodation: ~\u00a31,632 (as per your bookings)", "deadline": "\u2014", "done": false}, {"task": "Eurotunnel: ~\u00a3150-200 return (with pet supplement ~\u00a322 each way)", "deadline": "Book now", "done": false}, {"task": "Car rental: check Enterprise quote", "deadline": "Confirm", "done": false}, {"task": "Fuel: ~\u00a3250-350", "deadline": "\u2014", "done": false}, {"task": "Tolls: ~\u00a3200-300", "deadline": "\u2014", "done": false}, {"task": "Food & dining: ~\u00a350-80/day = \u00a3750-1,200", "deadline": "\u2014", "done": false}, {"task": "Activities & sightseeing: ~\u00a3200-300", "deadline": "\u2014", "done": false}, {"task": "Dog vet (tapeworm + any French vet): ~\u00a350-100", "deadline": "\u2014", "done": false}, {"task": "TOTAL ESTIMATE: ~\u00a33,200-4,000", "deadline": "\u2014", "done": false}]}], "cancellationDeadlines": [{"date": "30 Apr (Thu)", "item": "St Paul de Vence Airbnb - last day to cancel"}, {"date": "3 May (Sun)", "item": "Avignon Airbnb - last day to cancel"}, {"date": "7 May (Thu)", "item": "Nice/Cagnes-sur-Mer Airbnb - last day to cancel"}, {"date": "7 May (Thu)", "item": "Montpellier Airbnb - last day to cancel"}, {"date": "9 May (Sat)", "item": "Dijon Airbnb - last day to cancel"}, {"date": "10 May (Sun)", "item": "Reims Airbnb - last day to cancel"}]};
+
+function showTab(id){
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+document.getElementById(id).classList.add('active');
+document.querySelector(`nav button[onclick="showTab('${id}')"]`).classList.add('active');
+}
+
+function getStoredChecks(){try{return JSON.parse(localStorage.getItem('franceTripChecks')||'{}')}catch(e){return{}}}
+function saveCheck(key,val){const c=getStoredChecks();c[key]=val;localStorage.setItem('franceTripChecks',JSON.stringify(c))}
+
+function renderItinerary(){
+const el=document.getElementById('itinerary');
+let html='<h2 style="margin:1rem 0">🗺️ Day-by-Day Itinerary</h2>';
+tripData.itinerary.forEach(d=>{
+const isRest=d.drive==='—';
+const isLong=d.drive&&d.drive.includes('5');
+html+=`<div class="day-card ${isRest?'rest-day':''} ${isLong?'long-drive':''}">
+<div class="day-header">
+<span class="day-num">Day ${d.day}</span>
+<span class="day-route">${d.route}</span>
+<span class="day-date">${d.date}</span>
+</div>
+<div class="day-details">
+<div><div class="label">🚗 Drive</div>${d.drive}</div>
+<div><div class="label">🏨 Stay</div>${d.stay}</div>
+<div><div class="label">💰 Cost</div>${d.cost}</div>
+<div><div class="label">📝 Notes</div>${d.notes}</div>
+</div>
+${d.highlights?`<div class="highlights"><h4>✨ Highlights</h4><ul>${d.highlights.map(h=>`<li>${h}</li>`).join('')}</ul></div>`:''}
+</div>`;
+});
+el.innerHTML=html;
+}
+
+function renderChecklist(){
+const el=document.getElementById('checklist');
+const checks=getStoredChecks();
+const cats=tripData.preTripTasks.filter(c=>!['Packing - Clothes','Packing - Essentials','Packing - Dog Supplies'].includes(c.category));
+let totalDone=0,totalItems=0;
+cats.forEach(c=>c.items.forEach(i=>{totalItems++;if(checks[c.category+'_'+i.task])totalDone++}));
+const pct=totalItems?Math.round(totalDone/totalItems*100):0;
+let html=`<h2 style="margin:1rem 0">✅ Pre-Trip Checklist</h2>
+<div class="progress-text">${totalDone}/${totalItems} tasks complete (${pct}%)</div>
+<div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+<input class="search-box" placeholder="🔍 Search tasks..." oninput="filterChecklist(this.value)">`;
+cats.forEach(c=>{
+const catDone=c.items.filter(i=>checks[c.category+'_'+i.task]).length;
+html+=`<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+<h3>${c.category}</h3><span class="count">${catDone}/${c.items.length}</span></div>
+<div class="checklist">`;
+c.items.forEach(i=>{
+const key=c.category+'_'+i.task;
+const checked=checks[key]?'checked':'';
+const isUrgent=i.deadline&&(i.deadline.includes('NOW')||i.deadline.includes('22 Apr')||i.deadline.includes('25 Apr'));
+html+=`<div class="check-item ${checked?'done':''}" data-task="${i.task.toLowerCase()}">
+<input type="checkbox" ${checked} onchange="toggleCheck('${key.replace(/'/g,"\\'")}',this)">
+<span class="task-text">${i.task}</span>
+<span class="deadline ${isUrgent?'urgent':''}">${i.deadline||''}</span></div>`;
+});
+html+=`</div></div>`;
+});
+el.innerHTML=html;
+}
+
+function renderPacking(){
+const el=document.getElementById('packing-lists');
+const checks=getStoredChecks();
+const cats=tripData.preTripTasks.filter(c=>c.category.startsWith('Packing')||c.category==='Things to Buy Before Trip');
+let html='';
+cats.forEach(c=>{
+const catDone=c.items.filter(i=>checks['pack_'+i.task]).length;
+html+=`<div class="category"><div class="category-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+<h3>${c.category}</h3><span class="count">${catDone}/${c.items.length}</span></div>
+<div class="checklist">`;
+c.items.forEach(i=>{
+const key='pack_'+i.task;
+const checked=checks[key]?'checked':'';
+html+=`<div class="check-item ${checked?'done':''}" data-task="${i.task.toLowerCase()}">
+<input type="checkbox" ${checked} onchange="toggleCheck('${key.replace(/'/g,"\\'")}',this)">
+<span class="task-text">${i.task}</span></div>`;
+});
+html+=`</div></div>`;
+});
+el.innerHTML=html;
+}
+
+function renderDeadlines(){
+const el=document.getElementById('deadline-timeline');
+const deadlines=[
+{date:'29 Apr',item:'Order Crit\'Air vignette online with rental reg (certificat-air.gouv.fr) — save PDF proof, sticker won\'t arrive in time',urgent:true},
+{date:'22 Apr',item:'Dog Animal Health Certificate appointment at Alcombe',urgent:true},
+{date:'25 Apr',item:'Buy all car legal requirements (hi-vis, triangle, etc.)',urgent:true},
+{date:'25 Apr',item:'Get International Driving Permit from Post Office',urgent:true},
+{date:'29 Apr',item:'Book Eurotunnel both ways + pet supplement (need rental reg) — prices higher closer to date!',urgent:true},
+{date:'28 Apr',item:'Apply dog tick/flea treatment',urgent:false},
+{date:'30 Apr',item:'St Paul de Vence Airbnb — last day to cancel',urgent:false},
+{date:'1 May',item:'Download offline maps, pack everything',urgent:false},
+{date:'2 May',item:'🚗 DEPARTURE DAY — Enterprise Brentford pickup',urgent:false},
+{date:'3 May',item:'Avignon Airbnb — last day to cancel',urgent:false},
+{date:'7 May',item:'Nice/Cagnes-sur-Mer Airbnb — last cancel',urgent:false},
+{date:'7 May',item:'Montpellier Airbnb — last cancel',urgent:false},
+{date:'9 May',item:'Dijon Airbnb — last cancel',urgent:false},
+{date:'10 May',item:'Reims Airbnb — last cancel',urgent:false},
+{date:'11-15 May',item:'🐕 Dog tapeworm treatment (1-5 days before UK return)',urgent:true},
+{date:'13 May',item:'Vet visit in Lyon/Montpellier for tapeworm',urgent:true},
+{date:'16 May',item:'🏠 Return to London — drop car at Enterprise',urgent:false}
+];
+el.innerHTML=deadlines.map(d=>`<div class="timeline-item" style="${d.urgent?'border-left:3px solid var(--red)':''}">
+<strong style="color:${d.urgent?'var(--red)':'var(--accent)'}">${d.date}</strong><br>${d.item}</div>`).join('');
+}
+
+function toggleCheck(key,el){
+saveCheck(key,el.checked);
+const item=el.closest('.check-item');
+item.classList.toggle('done',el.checked);
+renderChecklist();renderPacking();
+}
+
+function filterChecklist(q){
+q=q.toLowerCase();
+document.querySelectorAll('#checklist .check-item').forEach(el=>{
+el.style.display=el.dataset.task.includes(q)?'flex':'none';
+});
+}
+
+
+function togglePack(key,el){
+saveCheck(key,el.checked);
+el.closest('.check-item').classList.toggle('done',el.checked);
+}
+function filterPacking(q){
+q=q.toLowerCase();
+document.querySelectorAll('#packing .check-item').forEach(el=>{
+el.style.display=el.dataset.task.includes(q)?'flex':'none';
+});
+}
+renderItinerary();renderChecklist();renderDeadlines();renderPacking();
+</script>
+</body>
+</html>
