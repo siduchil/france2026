@@ -1,85 +1,779 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>France Trip Planner</title>
-    <style>
-        body {
-            background-color: #f5f5dc; /* light beige */
-            color: #333;
-            font-family: Arial, sans-serif;
-        }
-        .navbar {
-            background-color: #ffa500; /* orange */
-            padding: 10px;
-            text-align: center;
-        }
-        .navbar a {
-            color: white;
-            padding: 14px 20px;
-            text-decoration: none;
-        }
-        .tab {
-            display: inline-block;
-        }
-        .city-card {
-            border: 1px solid #007bff; /* blue border */
-            margin: 10px;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        footer {
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            background-color: #ffa500;
-            text-align: center;
-            padding: 10px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>🇫🇷 France Road Trip — May 2026</title>
+<style>*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#fef9f0;--card:#fff;--accent:#e8572a;--accent2:#2a7de8;--green:#16a34a;--orange:#ea8c1a;--red:#dc2626;--text:#1a1a2e;--muted:#6b7280;--border:#e5ddd0;--sand:#f5eed9;--sea:#d4eaf7;--lavender:#ede4f7}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;padding-bottom:75px}
+a{color:var(--accent2)}
+.hero{background:linear-gradient(135deg,#f7a44c 0%,#e8572a 30%,#c2185b 60%,#7b1fa2 100%);padding:2rem 1.5rem;text-align:center;position:relative;overflow:hidden}
+.hero::after{content:'🌻🌊🍷🐕🚗🇫🇷';position:absolute;bottom:.3rem;left:0;right:0;font-size:1.5rem;letter-spacing:1rem;opacity:.3;text-align:center}
+.hero h1{font-size:2rem;color:#fff;text-shadow:0 2px 8px rgba(0,0,0,.2)}
+.hero p{color:rgba(255,255,255,.85);font-size:.95rem}
+.loc-banner{background:var(--sand);padding:.5rem 1rem;text-align:center;font-size:.8rem;color:var(--green);border-bottom:1px solid var(--border)}
+nav{display:flex;justify-content:space-around;position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:2px solid var(--border);z-index:100;padding:.3rem 0;box-shadow:0 -2px 12px rgba(0,0,0,.06)}
+nav button{background:none;border:none;color:var(--muted);font-size:.65rem;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:.4rem .5rem;border-radius:8px;transition:all .2s}
+nav button .icon{font-size:1.4rem}
+nav button.active{color:var(--accent);background:rgba(232,87,42,.08)}
+.container{max-width:900px;margin:0 auto;padding:.8rem}
+.tab{display:none}.tab.active{display:block}
+.card{background:var(--card);border-radius:14px;padding:1rem;margin-bottom:.7rem;border-left:4px solid var(--accent);box-shadow:0 1px 4px rgba(0,0,0,.05);transition:transform .15s}
+.card:active{transform:scale(.99)}
+.card.urgent{border-left-color:var(--red);background:#fff5f5}
+.card.done{opacity:.45;border-left-color:var(--border)}
+.card.not-needed{opacity:.3;border-left-color:var(--border)}
+.card h3{font-size:.95rem;margin-bottom:.3rem}
+.badge{display:inline-block;padding:.15rem .55rem;border-radius:20px;font-size:.7rem;font-weight:600}
+.badge-him{background:#dbeafe;color:#1d4ed8}.badge-her{background:#f3e8ff;color:#7c3aed}.badge-both{background:#dcfce7;color:#15803d}
+.badge-cat{background:var(--sand);color:var(--muted)}
+.btn-group{display:flex;gap:.3rem;margin-top:.5rem;flex-wrap:wrap}
+.btn{padding:.35rem .7rem;border-radius:20px;border:1.5px solid var(--border);background:#fff;color:var(--text);font-size:.75rem;cursor:pointer;transition:all .15s}
+.btn:active{transform:scale(.95)}
+.btn.active-done{background:var(--green);color:#fff;border-color:var(--green)}
+.btn.active-skip{background:var(--orange);color:#fff;border-color:var(--orange)}
+.notes-input{width:100%;margin-top:.4rem;padding:.5rem;background:var(--sand);border:1px solid var(--border);border-radius:10px;color:var(--text);font-size:.8rem;resize:none;font-family:inherit}
+.progress-bar{background:var(--border);border-radius:10px;height:10px;margin:.5rem 0;overflow:hidden}
+.progress-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#f7a44c,#e8572a,#c2185b);transition:width .4s}
+.filter-row{display:flex;gap:.3rem;margin-bottom:.8rem;overflow-x:auto;padding-bottom:.3rem}
+.filter-row .btn{white-space:nowrap}
+.city-card{background:var(--card);border-radius:14px;overflow:hidden;margin-bottom:1rem;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.city-header{padding:1rem 1.2rem;background:linear-gradient(135deg,#f7a44c,#e8572a);cursor:pointer;position:relative}
+.city-header h2{font-size:1.1rem;color:#fff}.city-header p{color:rgba(255,255,255,.85);font-size:.8rem}
+.city-header::after{content:'▼';position:absolute;right:1rem;top:50%;transform:translateY(-50%);color:rgba(255,255,255,.6);font-size:.8rem}
+.city-body{padding:.8rem 1rem}
+.section-title{color:var(--accent);font-size:.78rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin:.8rem 0 .4rem}
+.poi{display:block;background:var(--sand);padding:.55rem .8rem;border-radius:10px;margin-bottom:4px;text-decoration:none;color:var(--text);font-size:.83rem;border-left:3px solid var(--green);transition:background .15s}
+.poi:active{background:var(--border)}
+.poi.no-dog{border-left-color:var(--orange);background:#fff8f0}
+.poi .sub{color:var(--muted);font-size:.75rem}
+.poi.indian{border-left-color:var(--orange);background:#fff8f0}
+.contact-card{background:var(--card);padding:.8rem 1rem;border-radius:12px;margin-bottom:.5rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.contact-card a.call-btn{background:var(--green);color:#fff;padding:.4rem 1rem;border-radius:20px;text-decoration:none;font-size:.8rem;font-weight:600}
+.checklist-group{margin-bottom:1.2rem}
+.checklist-group h3{font-size:.9rem;margin-bottom:.4rem;color:var(--accent);cursor:pointer;padding:.5rem .7rem;background:var(--card);border-radius:10px;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.chk{display:flex;align-items:center;gap:.6rem;padding:.45rem .7rem;background:var(--card);margin-bottom:2px;border-radius:8px;font-size:.83rem}
+.chk.done{opacity:.4;text-decoration:line-through}
+.chk input{width:18px;height:18px;accent-color:var(--accent)}
+.home-card{background:var(--card);border-radius:14px;padding:1.1rem;margin-bottom:.8rem;box-shadow:0 2px 8px rgba(0,0,0,.05);border-left:4px solid var(--accent)}
+.home-card.sea{border-left-color:var(--accent2);background:var(--sea)}
+.home-card.lav{border-left-color:#7b1fa2;background:var(--lavender)}
+.home-card.sand{border-left-color:var(--orange);background:var(--sand)}
+.home-card h3{color:var(--accent);margin-bottom:.3rem;font-size:.95rem}
+.home-card p,.home-card li{color:var(--muted);font-size:.85rem}
+.home-card ul{margin-left:1rem;margin-top:.3rem}
+.countdown{font-size:3rem;font-weight:800;background:linear-gradient(135deg,#f7a44c,#e8572a,#c2185b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-align:center;margin:.3rem 0}
+.phrase-card{background:var(--card);border-radius:12px;padding:.7rem 1rem;margin-bottom:.4rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.phrase-card .fr{font-weight:700;color:var(--accent);font-size:.9rem}
+.phrase-card .en{color:var(--muted);font-size:.8rem}
+.phrase-card .phonetic{color:var(--accent2);font-size:.75rem;font-style:italic}
+.phrase-cat{color:var(--accent);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin:1rem 0 .4rem;padding-left:.3rem}
+@media(min-width:600px){nav{max-width:500px;left:50%;transform:translateX(-50%);border-radius:14px 14px 0 0}}
+</style>
 </head>
 <body>
-    <div class="navbar">
-        <div class="tab"><a href="#home">Home</a></div>
-        <div class="tab"><a href="#tasks">Tasks</a></div>
-        <div class="tab"><a href="#route">Route</a></div>
-        <div class="tab"><a href="#checklist">Checklist</a></div>
-        <div class="tab"><a href="#phrases">Phrases</a></div>
-        <div class="tab"><a href="#contacts">Contacts</a></div>
-    </div>
+<div class="hero">
+<h1>🇫🇷 France Road Trip</h1>
+<p>London → South of France & Back · 2-16 May 2026</p>
+</div>
+<div class="loc-banner" id="loc-banner">📍 Detecting location...</div>
+<div class="container">
+<div id="tab-home" class="tab active"></div>
+<div id="tab-tasks" class="tab"></div>
+<div id="tab-route" class="tab"></div>
+<div id="tab-checklist" class="tab"></div>
+<div id="tab-phrases" class="tab"></div>
+<div id="tab-contacts" class="tab"></div>
+</div>
+<nav>
+<button class="active" onclick="switchTab('home')"><span class="icon">🏠</span>Home</button>
+<button onclick="switchTab('tasks')"><span class="icon">📋</span>Tasks</button>
+<button onclick="switchTab('route')"><span class="icon">🗺️</span>Route</button>
+<button onclick="switchTab('checklist')"><span class="icon">✅</span>Pack</button>
+<button onclick="switchTab('phrases')"><span class="icon">🇫🇷</span>French</button>
+<button onclick="switchTab('contacts')"><span class="icon">📞</span>Contacts</button>
+</nav>
+<script>var TRIP_DATA={
+cities:[
+{id:"versailles",name:"Versailles",lat:48.8049,lng:2.1204,days:"Day 1",date:"Sat 2 May",
+ stay:{name:"Ibis Budget Porte d'Italie",cost:"£71",url:"https://www.google.com/maps?q=48.80151,2.12905",notes:"Park near hotel",phone:""},
+ drive:{from:"London",km:456,time:"5-6 hrs",notes:"Eurotunnel to Calais then A26/A1"},
+ ev:[{name:"Ionity Calais A26",url:"https://www.google.com/maps/search/Ionity+charging+Calais+A26"},{name:"TotalEnergies Aire de Ressons A1",url:"https://www.google.com/maps/search/TotalEnergies+charging+Aire+de+Ressons+A1"}],
+ dogWalks:[{name:"Versailles Gardens",url:"https://www.google.com/maps/search/Versailles+Gardens"},{name:"Versailles town walk",url:"https://www.google.com/maps/search/Versailles+old+town"}],
+ activities:[
+  {name:"Versailles Gardens",desc:"Dogs on lead. Free (musical fountain days ~€10). Better than palace.",url:"https://www.google.com/maps/search/Versailles+Gardens",dogOk:true},
+  {name:"Palace of Versailles (take turns)",desc:"No dogs inside. 45 min each. Book at chateauversailles.fr ~€21pp",url:"https://www.google.com/maps/place/Palace+of+Versailles",dogOk:false}
+ ],
+ eats:[
+  {name:"Le Limousin",desc:"Traditional French bistro, locals' favourite. Terrace.",url:"https://www.google.com/maps/search/Le+Limousin+Versailles",type:"local"},
+  {name:"Ore by Ducasse",desc:"Inside Versailles courtyard. Stunning. Pricey.",url:"https://www.google.com/maps/search/Ore+Ducasse+Versailles",type:"local"},
+  {name:"Indian restaurants in Versailles",desc:"Search nearby",url:"https://www.google.com/maps/search/indian+restaurant+Versailles+France",type:"indian"},
+  {name:"Passage Brady Paris (Little India)",desc:"Detour if near Paris",url:"https://www.google.com/maps/search/Passage+Brady+Paris+Indian",type:"indian"}
+ ],
+ shops:[{name:"Versailles Market",url:"https://www.google.com/maps/search/Versailles+market"}]
+},
+{id:"beaune",name:"Beaune",lat:47.0244,lng:4.8400,days:"Day 2",date:"Sun 3 May",
+ stay:{name:"Airbnb in Beaune",cost:"£104",url:"",notes:"Cancel before 3 Apr",phone:""},
+ drive:{from:"Versailles",km:310,time:"2h 40m",notes:"A6 south through Burgundy"},
+ ev:[{name:"Ionity Aire de Venoy A6",url:"https://www.google.com/maps/search/Ionity+charging+Aire+de+Venoy+A6"},{name:"TotalEnergies Beaune-Tailly A6",url:"https://www.google.com/maps/search/TotalEnergies+charging+Beaune+Tailly+A6"}],
+ dogWalks:[{name:"Medieval ramparts walk",url:"https://www.google.com/maps/search/Beaune+ramparts+walk"},{name:"Beaune old town",url:"https://www.google.com/maps/search/Beaune+old+town"}],
+ activities:[
+  {name:"Walk the medieval ramparts",desc:"Full circuit, dog-friendly, lovely views",url:"https://www.google.com/maps/search/Beaune+ramparts+walk",dogOk:true},
+  {name:"Wine tasting",desc:"Some domaines allow dogs on terraces. Marché aux Vins — call ahead",url:"https://www.google.com/maps/search/Marche+aux+Vins+Beaune",dogOk:"partial"},
+  {name:"Hospices de Beaune (take turns)",desc:"No dogs. 30 min each. ~€10pp. Stunning medieval hospital.",url:"https://www.google.com/maps/search/Hospices+de+Beaune",dogOk:false}
+ ],
+ eats:[
+  {name:"Ma Cuisine",desc:"Tiny wine bar, charcuterie & cheese. Local favourite. Book ahead.",url:"https://www.google.com/maps/search/Ma+Cuisine+Beaune",type:"local"},
+  {name:"Caves Madeleine",desc:"Wine cellar restaurant, regional dishes.",url:"https://www.google.com/maps/search/Caves+Madeleine+Beaune",type:"local"},
+  {name:"Indian restaurants",desc:"Limited in Beaune. Dijon (30 min) has more.",url:"https://www.google.com/maps/search/indian+restaurant+Dijon+France",type:"indian"}
+ ],
+ shops:[{name:"Beaune wine shops",url:"https://www.google.com/maps/search/wine+shop+Beaune"}]
+},
+{id:"avignon",name:"Avignon",lat:43.9493,lng:4.8055,days:"Day 3",date:"Mon 4 May",
+ stay:{name:"Airbnb in Avignon",cost:"£107",url:"",notes:"Cancel deadline: 3 May",phone:""},
+ drive:{from:"Beaune",km:453,time:"4 hrs",notes:"A6→A7 Autoroute du Soleil. Crosswinds near Valence."},
+ ev:[{name:"Ionity Aire de Mâcon A6",url:"https://www.google.com/maps/search/Ionity+charging+Macon+A6"},{name:"TotalEnergies Valence A7",url:"https://www.google.com/maps/search/TotalEnergies+charging+Valence+A7"},{name:"Ionity Aire de Mornas A7",url:"https://www.google.com/maps/search/Ionity+charging+Mornas+A7"}],
+ dogWalks:[{name:"City walls circuit",url:"https://www.google.com/maps/search/Avignon+city+walls+walk"},{name:"Île de la Barthelasse",url:"https://www.google.com/maps/search/Ile+de+la+Barthelasse+Avignon"}],
+ activities:[
+  {name:"Pont d'Avignon",desc:"Dogs allowed. ~€5.",url:"https://www.google.com/maps/search/Pont+d+Avignon",dogOk:true},
+  {name:"Walk the city walls",desc:"Full circuit, great Rhône views",url:"https://www.google.com/maps/search/Avignon+city+walls+walk",dogOk:true},
+  {name:"Île de la Barthelasse",desc:"Island in the Rhône, great dog walk, picnic spot",url:"https://www.google.com/maps/search/Ile+de+la+Barthelasse+Avignon",dogOk:true},
+  {name:"Palais des Papes (take turns)",desc:"No dogs. 30-40 min each. ~€12pp. Book at palais-des-papes.com",url:"https://www.google.com/maps/place/Palais+des+Papes+Avignon",dogOk:false}
+ ],
+ eats:[
+  {name:"Restaurant Numero 75",desc:"Beautiful courtyard terrace, Provençal cuisine. Dog-friendly.",url:"https://www.google.com/maps/search/Restaurant+Numero+75+Avignon",type:"local"},
+  {name:"L'Essentiel",desc:"Local favourite, seasonal menu, terrace.",url:"https://www.google.com/maps/search/L+Essentiel+Avignon",type:"local"},
+  {name:"Indian restaurants in Avignon",desc:"A few in old town",url:"https://www.google.com/maps/search/indian+restaurant+Avignon+France",type:"indian"}
+ ],
+ shops:[]
+},
+{id:"stpaul",name:"St Paul de Vence / Èze",lat:43.6961,lng:7.1214,days:"Days 4-5",date:"Tue-Wed 5-6 May",
+ stay:{name:"Airbnb in St Paul de Vence",cost:"£254",url:"",notes:"Park outside ramparts. Cancel: 30 Apr",phone:""},
+ drive:{from:"Avignon",km:344,time:"3h 10m",notes:"A8 coastal. Tunnels near Nice. Park outside ramparts, walk up Rue Grande."},
+ ev:[{name:"Ionity Aire de Lançon A7",url:"https://www.google.com/maps/search/Ionity+charging+Lancon+A7"},{name:"Ionity Aire de Vidauban A8",url:"https://www.google.com/maps/search/Ionity+charging+Vidauban+A8"}],
+ dogWalks:[{name:"St Paul de Vence village",url:"https://www.google.com/maps/search/Saint-Paul-de-Vence+village"},{name:"Èze village",url:"https://www.google.com/maps/search/Eze+Village+France"}],
+ activities:[
+  {name:"St Paul de Vence village walk",desc:"Medieval village IS the attraction. Streets, galleries, viewpoints. Dog-friendly.",url:"https://www.google.com/maps/search/Saint-Paul-de-Vence+village",dogOk:true},
+  {name:"Fondation Maeght sculpture garden",desc:"Dogs in outdoor garden. ~€16pp.",url:"https://www.google.com/maps/search/Fondation+Maeght",dogOk:true},
+  {name:"Èze village walk",desc:"Hilltop village, narrow streets, sea views.",url:"https://www.google.com/maps/search/Eze+Village+France",dogOk:true},
+  {name:"Fragonard Perfume Factory",desc:"Free tour. One goes in, other waits with dog.",url:"https://www.google.com/maps/search/Fragonard+Eze",dogOk:false},
+  {name:"Èze Exotic Garden (take turns)",desc:"~€7. Best coastal views. Call ahead re dogs.",url:"https://www.google.com/maps/search/Jardin+Exotique+Eze",dogOk:false}
+ ],
+ eats:[
+  {name:"La Colombe d'Or",desc:"Legendary. Art on walls, terrace garden. BOOK NOW.",url:"https://www.google.com/maps/search/La+Colombe+d+Or+Saint+Paul+de+Vence",type:"local"},
+  {name:"Le Tilleul",desc:"Terrace under lime tree, village square. Affordable.",url:"https://www.google.com/maps/search/Le+Tilleul+Saint+Paul+de+Vence",type:"local"},
+  {name:"Indian restaurants Antibes",desc:"Nearest options",url:"https://www.google.com/maps/search/indian+restaurant+Antibes+France",type:"indian"}
+ ],
+ shops:[{name:"Fragonard perfume shop",url:"https://www.google.com/maps/search/Fragonard+Eze"}]
+},
+{id:"nice",name:"Nice / Cagnes-sur-Mer",lat:43.6961,lng:7.2714,days:"Days 6-8",date:"Thu-Sat 7-9 May",
+ stay:{name:"Airbnb Cagnes-sur-Mer",cost:"£533 (3 nights)",url:"",notes:"Cancel: 7 Apr. VE Day 8 May — some shops closed.",phone:""},
+ drive:{from:"St Paul de Vence",km:10,time:"15 min",notes:"Short move"},
+ ev:[{name:"Public chargers Cagnes-sur-Mer",url:"https://www.google.com/maps/search/EV+charging+station+Cagnes-sur-Mer"},{name:"Tesla Supercharger Nice",url:"https://www.google.com/maps/search/Tesla+Supercharger+Nice"}],
+ dogWalks:[{name:"Cagnes-sur-Mer dog beach",url:"https://www.google.com/maps/search/Cagnes+sur+Mer+dog+beach"},{name:"Cap Ferrat coastal path",url:"https://www.google.com/maps/search/Sentier+du+Littoral+Cap+Ferrat"},{name:"Promenade des Anglais",url:"https://www.google.com/maps/search/Promenade+des+Anglais+Nice"}],
+ activities:[
+  {name:"Cap Ferrat coastal path",desc:"Stunning 1-hour peninsula walk. Dogs on lead. Best walk on the Riviera.",url:"https://www.google.com/maps/search/Sentier+du+Littoral+Cap+Ferrat",dogOk:true},
+  {name:"Cours Saleya Market",desc:"Morning flower & food market. Before 10am. Dogs fine.",url:"https://www.google.com/maps/search/Cours+Saleya+Market+Nice",dogOk:true},
+  {name:"Castle Hill",desc:"Walk up with dog. Best sunset viewpoint. Free.",url:"https://www.google.com/maps/search/Castle+Hill+Nice",dogOk:true},
+  {name:"Promenade des Anglais",desc:"Iconic seafront walk.",url:"https://www.google.com/maps/search/Promenade+des+Anglais+Nice",dogOk:true},
+  {name:"Vieux Nice streets",desc:"Wander, eat socca, sit on terraces.",url:"https://www.google.com/maps/search/Vieux+Nice+old+town",dogOk:true}
+ ],
+ eats:[
+  {name:"Chez Pipo",desc:"Famous socca. Nice institution. Terrace. Cash only.",url:"https://www.google.com/maps/search/Chez+Pipo+Nice",type:"local"},
+  {name:"Chez René Socca",desc:"Another socca legend. Outdoor. Dog-friendly.",url:"https://www.google.com/maps/search/Chez+Rene+Socca+Nice",type:"local"},
+  {name:"Le Safari",desc:"Cours Saleya terrace, people-watching. Solid Niçoise food.",url:"https://www.google.com/maps/search/Le+Safari+Nice",type:"local"},
+  {name:"Indian restaurants Nice",desc:"Decent selection around Vieux Nice",url:"https://www.google.com/maps/search/best+indian+restaurant+Nice+France",type:"indian"}
+ ],
+ shops:[{name:"Cours Saleya — olives, lavender, spices",url:"https://www.google.com/maps/search/Cours+Saleya+Market+Nice"}]
+},
+{id:"aix",name:"Aix-en-Provence",lat:43.5297,lng:5.4474,days:"Days 9-10",date:"Sun-Mon 10-11 May",
+ stay:{name:"Atrium d'Anaïte Hotel",cost:"£139 (2 nights)",url:"",notes:"",phone:""},
+ drive:{from:"Nice",km:195,time:"2 hrs",notes:"A8 west"},
+ ev:[{name:"Ionity Brignoles A8",url:"https://www.google.com/maps/search/Ionity+charging+Brignoles+A8"},{name:"Public chargers Aix",url:"https://www.google.com/maps/search/EV+charging+station+Aix-en-Provence"}],
+ dogWalks:[{name:"Cours Mirabeau",url:"https://www.google.com/maps/search/Cours+Mirabeau+Aix+en+Provence"},{name:"Bibemus Quarries trail",url:"https://www.google.com/maps/search/Bibemus+Quarries+Aix"}],
+ activities:[
+  {name:"Sunday market (Day 9!)",desc:"One of the best in Provence. Place Richelme. Dogs fine.",url:"https://www.google.com/maps/search/Aix+en+Provence+market+Place+Richelme",dogOk:true},
+  {name:"Cours Mirabeau",desc:"Tree-lined boulevard, fountains, café terraces.",url:"https://www.google.com/maps/search/Cours+Mirabeau+Aix",dogOk:true},
+  {name:"Luberon villages day trip",desc:"Gordes, Roussillon. Outdoor hilltop villages. Dog-friendly.",url:"https://www.google.com/maps/dir/Aix-en-Provence/Gordes/Roussillon+France",dogOk:true},
+  {name:"Cézanne's Studio (take turns)",desc:"No dogs. 20 min each. ~€8pp.",url:"https://www.google.com/maps/search/Atelier+Cezanne",dogOk:false}
+ ],
+ eats:[
+  {name:"Les Deux Garçons",desc:"Historic café on Cours Mirabeau. Cézanne drank here. Terrace.",url:"https://www.google.com/maps/search/Les+Deux+Garcons+Aix",type:"local"},
+  {name:"Le Petit Verdot",desc:"Wine bar, local food. Terrace. Locals' favourite.",url:"https://www.google.com/maps/search/Le+Petit+Verdot+Aix",type:"local"},
+  {name:"Indian restaurants Aix",desc:"A few in old town",url:"https://www.google.com/maps/search/indian+restaurant+Aix-en-Provence",type:"indian"}
+ ],
+ shops:[{name:"Calissons (Aix specialty sweets)",url:"https://www.google.com/maps/search/calissons+shop+Aix+en+Provence"},{name:"Provençal market produce",url:"https://www.google.com/maps/search/Aix+en+Provence+market"}]
+},
+{id:"montpellier",name:"Montpellier",lat:43.6108,lng:3.8767,days:"Day 11",date:"Tue 12 May",
+ stay:{name:"Airbnb Montpellier",cost:"£81",url:"",notes:"Park at Comédie car park. Cancel: 7 May",phone:""},
+ drive:{from:"Aix",km:91,time:"1 hr",notes:"Short drive"},
+ ev:[{name:"Public chargers Montpellier",url:"https://www.google.com/maps/search/EV+charging+station+Montpellier"}],
+ dogWalks:[{name:"Promenade du Peyrou",url:"https://www.google.com/maps/search/Promenade+du+Peyrou+Montpellier"},{name:"Place de la Comédie",url:"https://www.google.com/maps/search/Place+de+la+Comedie+Montpellier"}],
+ activities:[
+  {name:"Place de la Comédie",desc:"Grand square, evening stroll, street performers.",url:"https://www.google.com/maps/search/Place+de+la+Comedie+Montpellier",dogOk:true},
+  {name:"Promenade du Peyrou",desc:"Park with triumphal arch. Great views. Dog-friendly.",url:"https://www.google.com/maps/search/Promenade+du+Peyrou+Montpellier",dogOk:true},
+  {name:"Antigone district",desc:"Grand neoclassical architecture walk.",url:"https://www.google.com/maps/search/Antigone+Montpellier",dogOk:true}
+ ],
+ eats:[
+  {name:"Le Petit Jardin",desc:"Hidden garden terrace. Lovely. Book ahead.",url:"https://www.google.com/maps/search/Le+Petit+Jardin+Montpellier",type:"local"},
+  {name:"Indian restaurants Montpellier",desc:"University city, decent options",url:"https://www.google.com/maps/search/best+indian+restaurant+Montpellier",type:"indian"}
+ ],
+ shops:[]
+},
+{id:"lyon",name:"Lyon",lat:45.7640,lng:4.8357,days:"Day 12",date:"Wed 13 May",
+ stay:{name:"Hôtel Le Collège",cost:"£129",url:"",notes:"LEZ zone. Dog tapeworm vet visit!",phone:""},
+ drive:{from:"Montpellier",km:228,time:"2h 10m",notes:"A9→A7 north"},
+ ev:[{name:"Ionity Montélimar A7",url:"https://www.google.com/maps/search/Ionity+charging+Montelimar+A7"},{name:"Public chargers Vieux Lyon",url:"https://www.google.com/maps/search/EV+charging+station+Vieux+Lyon"}],
+ dogWalks:[{name:"Parc de la Tête d'Or",url:"https://www.google.com/maps/search/Parc+de+la+Tete+d+Or+Lyon"},{name:"Rhône riverside",url:"https://www.google.com/maps/search/Berges+du+Rhone+Lyon"}],
+ activities:[
+  {name:"Traboules (secret passageways)",desc:"Outdoor/covered. Dog fine. Download walking map.",url:"https://www.google.com/maps/search/Traboules+Vieux+Lyon",dogOk:true},
+  {name:"Fourvière Hill",desc:"Panoramic city views. Dog-friendly.",url:"https://www.google.com/maps/search/Fourviere+Hill+Lyon",dogOk:true},
+  {name:"Parc de la Tête d'Or",desc:"Huge park, lake. Dogs on lead.",url:"https://www.google.com/maps/search/Parc+de+la+Tete+d+Or+Lyon",dogOk:true},
+  {name:"Les Halles Paul Bocuse",desc:"Food market. Dogs tolerated. Graze through. €30-40 for two.",url:"https://www.google.com/maps/search/Les+Halles+Paul+Bocuse+Lyon",dogOk:true}
+ ],
+ eats:[
+  {name:"Daniel et Denise",desc:"Classic Bouchon Lyonnais. THE Lyon experience. BOOK AHEAD.",url:"https://www.google.com/maps/search/Daniel+et+Denise+Lyon",type:"local"},
+  {name:"Café Comptoir Abel",desc:"Oldest bouchon (1928). Terrace. Traditional.",url:"https://www.google.com/maps/search/Cafe+Comptoir+Abel+Lyon",type:"local"},
+  {name:"Indian restaurants Lyon",desc:"Good options available",url:"https://www.google.com/maps/search/best+indian+restaurant+Lyon",type:"indian"}
+ ],
+ shops:[]
+},
+{id:"dijon",name:"Dijon",lat:47.3220,lng:5.0415,days:"Day 13",date:"Thu 14 May",
+ stay:{name:"Airbnb Dijon",cost:"£107",url:"",notes:"Trémouille car park ~€11/24hrs. Free on Blvd Voltaire (15 min walk). Cancel: 9 May",phone:""},
+ drive:{from:"Lyon",km:487,time:"4h 30m",notes:"Longest return leg. Lunch stop at Chalon-sur-Saône."},
+ ev:[{name:"Ionity Mâcon A6",url:"https://www.google.com/maps/search/Ionity+charging+Macon+A6"},{name:"TotalEnergies Chalon-sur-Saône A6",url:"https://www.google.com/maps/search/TotalEnergies+charging+Chalon+sur+Saone+A6"}],
+ dogWalks:[{name:"Jardin Darcy",url:"https://www.google.com/maps/search/Jardin+Darcy+Dijon"},{name:"Dijon old town",url:"https://www.google.com/maps/search/Dijon+old+town"}],
+ activities:[
+  {name:"Owl's Trail (Parcours de la Chouette)",desc:"Free self-guided walk. 1 hour. Dog-friendly.",url:"https://www.google.com/maps/search/Parcours+de+la+Chouette+Dijon",dogOk:true},
+  {name:"Maille mustard shop",desc:"One pops in, other waits with dog. Fresh mustard from the pump!",url:"https://www.google.com/maps/search/Maille+boutique+Dijon",dogOk:false},
+  {name:"Dijon old town walk",desc:"Half-timbered houses, Ducal Palace exterior.",url:"https://www.google.com/maps/search/Dijon+old+town",dogOk:true}
+ ],
+ eats:[
+  {name:"DZ'envies",desc:"Modern French, great terrace. Book ahead.",url:"https://www.google.com/maps/search/DZ+envies+Dijon",type:"local"},
+  {name:"Les Halles de Dijon",desc:"Covered market. Tue/Thu/Fri/Sat mornings.",url:"https://www.google.com/maps/search/Les+Halles+de+Dijon",type:"local"},
+  {name:"Indian restaurants Dijon",desc:"Several near Rue de la Liberté",url:"https://www.google.com/maps/search/best+indian+restaurant+Dijon",type:"indian"}
+ ],
+ shops:[{name:"Maille mustard boutique",url:"https://www.google.com/maps/search/Maille+boutique+Dijon"}]
+},
+{id:"reims",name:"Reims",lat:49.2583,lng:4.0317,days:"Day 14",date:"Fri 15 May",
+ stay:{name:"Airbnb Reims",cost:"£107",url:"",notes:"Park in front to unload, car park 200m. Cancel: 10 May",phone:""},
+ drive:{from:"Dijon",km:220,time:"2h 30m",notes:"A31→A26"},
+ ev:[{name:"Ionity Langres A31",url:"https://www.google.com/maps/search/Ionity+charging+Langres+A31"},{name:"TotalEnergies Troyes A26",url:"https://www.google.com/maps/search/TotalEnergies+charging+Troyes+A26"}],
+ dogWalks:[{name:"Parc de la Patte d'Oie",url:"https://www.google.com/maps/search/Parc+de+la+Patte+d+Oie+Reims"}],
+ activities:[
+  {name:"Champagne house tour (take turns)",desc:"No dogs in cellars. Book Taittinger ~€29pp. taittinger.com",url:"https://www.google.com/maps/search/Taittinger+Reims",dogOk:false},
+  {name:"Reims Cathedral exterior",desc:"Stunning Gothic. Dogs not inside but exterior is worth it.",url:"https://www.google.com/maps/search/Reims+Cathedral",dogOk:true},
+  {name:"Buy champagne",desc:"30-50% cheaper than UK. Bring bubblewrap!",url:"https://www.google.com/maps/search/champagne+shop+Reims",dogOk:true}
+ ],
+ eats:[
+  {name:"Brasserie Le Boulingrin",desc:"Art deco, Reims institution since 1925. Terrace. Seafood.",url:"https://www.google.com/maps/search/Brasserie+Le+Boulingrin+Reims",type:"local"},
+  {name:"Le Jardin Les Crayères",desc:"Garden restaurant. Splurge for last night in France.",url:"https://www.google.com/maps/search/Le+Jardin+Les+Crayeres+Reims",type:"local"},
+  {name:"Indian restaurants Reims",desc:"A few options",url:"https://www.google.com/maps/search/indian+restaurant+Reims",type:"indian"}
+ ],
+ shops:[{name:"Champagne houses retail shops",url:"https://www.google.com/maps/search/champagne+shop+Reims"}]
+},
+{id:"home",name:"Home — London",lat:51.5074,lng:-0.1278,days:"Day 15",date:"Sat 16 May",
+ stay:{name:"Home!",cost:"Free",url:"",notes:"Return car to Enterprise Brentford",phone:""},
+ drive:{from:"Reims",km:170,time:"3-4 hrs + tunnel",notes:"A26 to Calais. SWITCH BACK TO LEFT in UK!"},
+ ev:[{name:"TotalEnergies Calais pre-tunnel",url:"https://www.google.com/maps/search/EV+charging+station+Calais+Eurotunnel"}],
+ dogWalks:[],activities:[],eats:[],shops:[]
+}
+],
+tasks:[
+{id:"t1",task:"Visit Enterprise Brentford — ask all 18 questions",who:"both",deadline:"Tue 22 Apr",category:"car",done:false,notNeeded:false,notes:""},
+{id:"t2",task:"Get International Driving Permit from Post Office",who:"him",deadline:"By 25 Apr",category:"docs",done:false,notNeeded:false,notes:""},
+{id:"t3",task:"Confirm dog AHC appointment at Alcombe (22 Apr)",who:"both",deadline:"22 Apr",category:"dog",done:false,notNeeded:false,notes:""},
+{id:"t4",task:"Buy from Halfords: hi-vis x2, warning triangle, headlight deflectors, GB sticker",who:"him",deadline:"By 25 Apr",category:"car",done:false,notNeeded:false,notes:""},
+{id:"t5",task:"Buy from Amazon: phone mount, USB-C car charger, blind spot mirrors, dog harness, dog seat cover, sun shades, EU adapters x2",who:"her",deadline:"Order by 23 Apr",category:"shopping",done:false,notNeeded:false,notes:""},
+{id:"t6",task:"Get travel insurance (covers France, driving, dog)",who:"both",deadline:"By 25 Apr",category:"docs",done:false,notNeeded:false,notes:""},
+{id:"t7",task:"Apply dog tick/flea treatment",who:"both",deadline:"28 Apr",category:"dog",done:false,notNeeded:false,notes:""},
+{id:"t8",task:"Book Champagne house tour Reims (Taittinger/Veuve Clicquot)",who:"her",deadline:"ASAP",category:"booking",done:false,notNeeded:false,notes:""},
+{id:"t9",task:"Book La Colombe d'Or dinner (St Paul de Vence)",who:"her",deadline:"ASAP",category:"booking",done:false,notNeeded:false,notes:""},
+{id:"t10",task:"Book Daniel et Denise bouchon Lyon (terrace + dog)",who:"her",deadline:"ASAP",category:"booking",done:false,notNeeded:false,notes:""},
+{id:"t11",task:"Book Versailles Palace tickets (if doing take-turns)",who:"her",deadline:"By 30 Apr",category:"booking",done:false,notNeeded:false,notes:""},
+{id:"t12",task:"Get Monzo/Starling card (zero FX fees)",who:"both",deadline:"By 25 Apr",category:"docs",done:false,notNeeded:false,notes:""},
+{id:"t13",task:"Pick up rental car from Enterprise Brentford",who:"him",deadline:"29 Apr",category:"car",done:false,notNeeded:false,notes:""},
+{id:"t14",task:"Order Crit'Air vignette online (once you have reg)",who:"him",deadline:"29 Apr",category:"car",done:false,notNeeded:false,notes:""},
+{id:"t15",task:"Book Eurotunnel both ways + pet supplement",who:"him",deadline:"29 Apr",category:"car",done:false,notNeeded:false,notes:""},
+{id:"t16",task:"Download offline Google Maps for all of France",who:"both",deadline:"1 May",category:"tech",done:false,notNeeded:false,notes:""},
+{id:"t17",task:"Download Google Translate French offline pack",who:"both",deadline:"1 May",category:"tech",done:false,notNeeded:false,notes:""},
+{id:"t18",task:"Download Waze app",who:"him",deadline:"1 May",category:"tech",done:false,notNeeded:false,notes:""},
+{id:"t19",task:"Download ABRP + Chargemap apps (if EV)",who:"him",deadline:"1 May",category:"tech",done:false,notNeeded:false,notes:""},
+{id:"t20",task:"Download podcasts/audiobooks for long drives",who:"both",deadline:"1 May",category:"tech",done:false,notNeeded:false,notes:""},
+{id:"t21",task:"Print all hotel/Airbnb confirmations as offline backup",who:"her",deadline:"1 May",category:"docs",done:false,notNeeded:false,notes:""},
+{id:"t22",task:"Photocopy all documents (keep separate from originals)",who:"her",deadline:"1 May",category:"docs",done:false,notNeeded:false,notes:""},
+{id:"t23",task:"Get €100-150 cash in small notes",who:"him",deadline:"1 May",category:"docs",done:false,notNeeded:false,notes:""},
+{id:"t24",task:"Pack everything (see Checklist tab)",who:"both",deadline:"1 May",category:"packing",done:false,notNeeded:false,notes:""},
+{id:"t25",task:"DEPARTURE DAY — Enterprise Brentford → Eurotunnel → France!",who:"both",deadline:"2 May",category:"travel",done:false,notNeeded:false,notes:""},
+{id:"t26",task:"Dog tapeworm treatment at vet (1-5 days before UK return)",who:"both",deadline:"11-15 May",category:"dog",done:false,notNeeded:false,notes:"Booked. Lyon vet."},
+{id:"t27",task:"Return car to Enterprise Brentford",who:"him",deadline:"16 May",category:"car",done:false,notNeeded:false,notes:""}
+],
+checklists:{
+pack_him:["7x t-shirts (light cotton/linen)","2x long-sleeve shirts","1x jumper/hoodie","1x packable waterproof","3x shorts","2x light trousers/chinos","1x jeans","1x smart-casual outfit","Walking shoes (cobblestones!)","Sandals/flip-flops","Swimwear","7-8x underwear & socks","Sunhat + sunglasses","Sleepwear"],
+pack_her:["7x tops/blouses","2x cardigans/wraps","1x packable waterproof","3x shorts/skirts","2x light trousers/dresses","1x smart-casual outfit","Walking shoes","Sandals","Swimwear","7-8x underwear","Sunhat + sunglasses","Sleepwear"],
+toiletries:["Sunscreen SPF50","Aftersun/moisturiser","Insect repellent","First aid kit (plasters, paracetamol, ibuprofen, antihistamines)","Prescription meds in original packaging","Hand sanitiser","Wet wipes","Toothbrushes, toothpaste, deodorant"],
+tech:["Phone chargers + USB-C cables","Power bank","EU adapters x2 (Type C/E)","Car phone mount","12V USB-C car charger (dual)","Headphones","Blind spot stick-on mirrors"],
+car_comfort:["Travel pillow (wife)","Light blanket","Reusable water bottles x2","Thermos flask","Snacks — biscuits, nuts, crisps","Indian snacks from local shop!","Wet wipes & tissues","Plastic bags (rubbish, wet towel)","Car bin","Windscreen sun shade"],
+dog:["Dog food (15 days)","Collapsible bowls x2","Lead, harness, long line","Poo bags (loads!)","Dog bed/blanket (car + accommodation)","Dog towel","Favourite toy","Car harness/seatbelt","Cooling bandana","Paw balm","Portable water bottle with bowl"],
+docs:["Passports (both)","BRP cards","Schengen visas","Driving licence + IDP","Dog AHC + vaccination records","Rental agreement","Eurotunnel booking","Hotel/Airbnb confirmations (printed)","Travel insurance policy","Photocopies of everything","Enterprise emergency number"],
+car_legal:["Hi-vis vests x2 (IN car, not boot!)","Warning triangle","Headlight deflectors","GB sticker","Parking disc (buy at French tabac €1)"]
+},
+contacts:[
+{name:"Emergency (Europe-wide)",phone:"112",category:"emergency"},
+{name:"French Police",phone:"17",category:"emergency"},
+{name:"French Ambulance (SAMU)",phone:"15",category:"emergency"},
+{name:"Enterprise Brentford",phone:"020 8560 3456",category:"car"},
+{name:"Eurotunnel",phone:"08443 35 35 35",category:"travel"},
+{name:"AA European Breakdown",phone:"+44 800 072 3279",category:"car"},
+{name:"Alcombe Vet (dog AHC)",phone:"Check booking",category:"dog"},
+{name:"Vétérinaire Fermaud (Lyon tapeworm)",phone:"Check veterinaire-fermaud.fr",category:"dog"},
+{name:"Ibis Budget (Versailles area)",phone:"See booking",category:"stay"},
+{name:"Airbnb Beaune host",phone:"Via Airbnb app",category:"stay"},
+{name:"Airbnb Avignon host",phone:"Via Airbnb app",category:"stay"},
+{name:"Airbnb St Paul de Vence host",phone:"Via Airbnb app",category:"stay"},
+{name:"Airbnb Cagnes-sur-Mer host",phone:"Via Airbnb app",category:"stay"},
+{name:"Atrium d'Anaïte Hotel (Aix)",phone:"See booking",category:"stay"},
+{name:"Airbnb Montpellier host",phone:"Via Airbnb app",category:"stay"},
+{name:"Hôtel Le Collège (Lyon)",phone:"See booking",category:"stay"},
+{name:"Airbnb Dijon host",phone:"Via Airbnb app",category:"stay"},
+{name:"Airbnb Reims host",phone:"Via Airbnb app",category:"stay"},
+{name:"UK Embassy Paris",phone:"+33 1 44 51 31 00",category:"emergency"},
+{name:"Taittinger Reims (champagne tour)",phone:"See booking",category:"booking"},
+{name:"La Colombe d'Or (St Paul de Vence)",phone:"See booking",category:"booking"},
+{name:"Daniel et Denise (Lyon)",phone:"See booking",category:"booking"}
+],
+deadlines:[
+{date:"2026-04-22",item:"Enterprise visit + Dog AHC appointment"},
+{date:"2026-04-25",item:"Buy car kit, IDP, travel insurance, Monzo card"},
+{date:"2026-04-28",item:"Dog tick/flea treatment"},
+{date:"2026-04-29",item:"Pick up car, book Eurotunnel, order Crit'Air"},
+{date:"2026-04-30",item:"St Paul de Vence Airbnb — last cancel"},
+{date:"2026-05-01",item:"Final packing, downloads, print docs"},
+{date:"2026-05-02",item:"🚗 DEPARTURE DAY"},
+{date:"2026-05-03",item:"Avignon Airbnb — last cancel"},
+{date:"2026-05-07",item:"Nice + Montpellier Airbnbs — last cancel"},
+{date:"2026-05-09",item:"Dijon Airbnb — last cancel"},
+{date:"2026-05-10",item:"Reims Airbnb — last cancel"},
+{date:"2026-05-13",item:"🐕 Dog tapeworm vet visit Lyon"},
+{date:"2026-05-16",item:"🏠 Return to London"}
+]
+};
+</script>
+<script>var PHRASES=[
+{cat:"🚗 Driving & Directions",phrases:[
+{fr:"Tout droit",en:"Straight ahead",ph:"too drwah"},
+{fr:"À gauche",en:"Turn left",ph:"ah gohsh"},
+{fr:"À droite",en:"Turn right",ph:"ah drwaht"},
+{fr:"Où est le parking?",en:"Where is the car park?",ph:"oo eh luh par-keeng"},
+{fr:"Le plein, s'il vous plaît",en:"Fill it up please",ph:"luh plan, seel voo pleh"},
+{fr:"Sans plomb",en:"Unleaded petrol",ph:"sahn plom"},
+{fr:"Gazole",en:"Diesel",ph:"gah-zol"},
+{fr:"Je suis en panne",en:"I've broken down",ph:"zhuh swee ahn pahn"},
+{fr:"Ralentir",en:"Slow down",ph:"rah-lahn-teer"},
+{fr:"Sortie",en:"Exit",ph:"sor-tee"},
+{fr:"Déviation",en:"Diversion",ph:"day-vee-ah-syon"},
+{fr:"Péage",en:"Toll",ph:"pay-ahzh"},
+{fr:"Stationnement interdit",en:"No parking",ph:"stah-syon-mahn an-tehr-dee"}
+]},
+{cat:"🍽️ Restaurants & Food",phrases:[
+{fr:"Une table pour deux, s'il vous plaît",en:"A table for two please",ph:"oon tahbl poor duh, seel voo pleh"},
+{fr:"L'addition, s'il vous plaît",en:"The bill please",ph:"lah-dee-syon, seel voo pleh"},
+{fr:"Est-ce que les chiens sont acceptés?",en:"Are dogs allowed?",ph:"ess-kuh lay shee-en son ak-sep-tay"},
+{fr:"En terrasse, s'il vous plaît",en:"On the terrace please",ph:"ahn teh-rahss, seel voo pleh"},
+{fr:"Je voudrais...",en:"I would like...",ph:"zhuh voo-dreh"},
+{fr:"Un verre de vin rouge/blanc",en:"A glass of red/white wine",ph:"uhn vehr duh van roozh/blahn"},
+{fr:"Une carafe d'eau",en:"A jug of water (free!)",ph:"oon kah-rahf doh"},
+{fr:"C'est délicieux!",en:"It's delicious!",ph:"seh day-lee-syuh"},
+{fr:"Végétarien",en:"Vegetarian",ph:"vay-zhay-tah-ree-an"},
+{fr:"Sans gluten",en:"Gluten free",ph:"sahn gloo-ten"},
+{fr:"L'entrée / Le plat / Le dessert",en:"Starter / Main / Dessert",ph:"lahn-tray / luh plah / luh deh-sehr"}
+]},
+{cat:"🐕 Dog-Related",phrases:[
+{fr:"Mon chien est gentil",en:"My dog is friendly",ph:"mon shee-en eh zhahn-tee"},
+{fr:"Où puis-je promener mon chien?",en:"Where can I walk my dog?",ph:"oo pwee-zhuh prom-nay mon shee-en"},
+{fr:"Y a-t-il un vétérinaire près d'ici?",en:"Is there a vet nearby?",ph:"ee ah-teel uhn vay-tay-ree-nehr preh dee-see"},
+{fr:"De l'eau pour le chien, s'il vous plaît",en:"Water for the dog please",ph:"duh loh poor luh shee-en, seel voo pleh"},
+{fr:"Les chiens sont-ils autorisés?",en:"Are dogs permitted?",ph:"lay shee-en son-teel oh-tor-ee-zay"}
+]},
+{cat:"👋 Greetings & Basics",phrases:[
+{fr:"Bonjour",en:"Hello / Good morning",ph:"bon-zhoor"},
+{fr:"Bonsoir",en:"Good evening",ph:"bon-swahr"},
+{fr:"Merci beaucoup",en:"Thank you very much",ph:"mehr-see boh-koo"},
+{fr:"S'il vous plaît",en:"Please",ph:"seel voo pleh"},
+{fr:"Excusez-moi",en:"Excuse me",ph:"ex-koo-zay mwah"},
+{fr:"Parlez-vous anglais?",en:"Do you speak English?",ph:"par-lay voo ahn-gleh"},
+{fr:"Je ne parle pas français",en:"I don't speak French",ph:"zhuh nuh parl pah frahn-seh"},
+{fr:"Oui / Non",en:"Yes / No",ph:"wee / non"},
+{fr:"Au revoir",en:"Goodbye",ph:"oh ruh-vwahr"},
+{fr:"Bonne journée!",en:"Have a nice day!",ph:"bon zhoor-nay"}
+]},
+{cat:"🛒 Shopping & Markets",phrases:[
+{fr:"C'est combien?",en:"How much is it?",ph:"seh kom-bee-en"},
+{fr:"Je voudrais goûter",en:"I'd like to taste",ph:"zhuh voo-dreh goo-tay"},
+{fr:"Un sac, s'il vous plaît",en:"A bag please",ph:"uhn sahk, seel voo pleh"},
+{fr:"Trop cher",en:"Too expensive",ph:"troh shehr"},
+{fr:"Je prends celui-ci",en:"I'll take this one",ph:"zhuh prahn suh-lwee-see"}
+]},
+{cat:"🚨 Emergency",phrases:[
+{fr:"Aidez-moi!",en:"Help me!",ph:"ay-day mwah"},
+{fr:"Appelez la police",en:"Call the police",ph:"ah-play lah po-lees"},
+{fr:"J'ai besoin d'un médecin",en:"I need a doctor",ph:"zhay buh-zwan duhn mayd-san"},
+{fr:"Où est l'hôpital?",en:"Where is the hospital?",ph:"oo eh loh-pee-tahl"},
+{fr:"J'ai perdu mon passeport",en:"I've lost my passport",ph:"zhay pehr-doo mon pahs-por"},
+{fr:"Je suis allergique à...",en:"I'm allergic to...",ph:"zhuh swee ah-lehr-zheek ah"}
+]},
+{cat:"🏨 Accommodation",phrases:[
+{fr:"J'ai une réservation",en:"I have a reservation",ph:"zhay oon ray-zehr-vah-syon"},
+{fr:"À quelle heure est le check-out?",en:"What time is checkout?",ph:"ah kel uhr eh luh check-out"},
+{fr:"Le wifi, s'il vous plaît?",en:"The wifi please?",ph:"luh wee-fee, seel voo pleh"},
+{fr:"Où puis-je garer la voiture?",en:"Where can I park the car?",ph:"oo pwee-zhuh gah-ray lah vwah-toor"}
+]}
+];
+</script>
+<script>var S=k=>{try{return JSON.parse(localStorage.getItem('ft_'+k)||'{}')}catch(e){return{}}};
+var W=(k,v)=>localStorage.setItem('ft_'+k,JSON.stringify(v));
+let currentCity=null,userLat=null,userLng=null;
 
-    <div id="content">
-        <h1>Welcome to your France Trip Planner!</h1>
-        <div class="city-card">
-            <h2>Day 1: Activity & Restaurant Information</h2>
-            <p>Activities: ...</p>
-            <p>Restaurants: ...</p>
-            <p>Dog Walks: ...</p>
-        </div>
-        <!-- Add 14 more city cards for the remaining days -->
-    </div>
+function switchTab(id){
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+document.getElementById('tab-'+id).classList.add('active');
+document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+document.querySelector(`nav button[onclick="switchTab('${id}')"]`).classList.add('active');
+if(id==='home')renderHome();
+}
 
-    <script>
-        // JavaScript for task tracking, countdown timer, localStorage for checkboxes, etc.
+function detectLocation(){
+if(!navigator.geolocation){document.getElementById('loc-banner').textContent='📍 Location unavailable — showing all info';return}
+navigator.geolocation.getCurrentPosition(pos=>{
+userLat=pos.coords.latitude;userLng=pos.coords.longitude;
+let minD=Infinity;
+TRIP_DATA.cities.forEach(c=>{
+const d=Math.sqrt(Math.pow(c.lat-userLat,2)+Math.pow(c.lng-userLng,2));
+if(d<minD){minD=d;currentCity=c}
+});
+if(minD>2)currentCity=null;
+const banner=document.getElementById('loc-banner');
+if(currentCity){
+banner.innerHTML=`📍 Near <strong>${currentCity.name}</strong> — showing relevant info`;
+banner.style.color='var(--green)';
+}else{
+banner.textContent='📍 Not near any trip city — showing full trip overview';
+banner.style.color='var(--muted)';
+}
+renderHome();renderChecklist();
+},()=>{document.getElementById('loc-banner').textContent='📍 Location denied — showing all info';renderHome()});
+}
 
-        // Example of location detection
-        function detectLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
-            } else {
-                alert("Geolocation is not supported by this browser.");
-            }
-        }
-        function showPosition(position) {
-            console.log("Latitude: " + position.coords.latitude + " Longitude: " + position.coords.longitude);
-        }
+function renderHome(){
+const el=document.getElementById('tab-home');
+const now=new Date();
+const dep=new Date('2026-05-02T06:00:00');
+const ret=new Date('2026-05-16T20:00:00');
+const tasks=S('tasks');
+const totalT=TRIP_DATA.tasks.length;
+const doneT=TRIP_DATA.tasks.filter(t=>tasks[t.id]==='done'||tasks[t.id]==='skip').length;
+const pct=Math.round(doneT/totalT*100);
 
-        detectLocation();
-    </script>
+let h='';
+// Countdown
+if(now<dep){
+const diff=Math.ceil((dep-now)/(1000*60*60*24));
+h+=`<div class="home-card" style="text-align:center"><p>Days until departure</p><div class="countdown">${diff}</div><p>Saturday 2 May 2026, 6:00 AM</p></div>`;
+}else if(now<=ret){
+const dayNum=Math.ceil((now-dep)/(1000*60*60*24))+1;
+const city=TRIP_DATA.cities.find(c=>{const d=parseInt(c.days.replace(/\D/g,''));return dayNum>=d&&dayNum<=d+(c.days.includes('-')?parseInt(c.days.split('-')[1]):0);})||currentCity;
+if(city)h+=`<div class="home-card"><h3>📍 Day ${dayNum} — ${city.name}</h3><p>${city.date}</p></div>`;
+}
 
-    <footer>
-        <p>Countdown to your trip: <span id="countdown">10 days</span></p>
-    </footer>
+// Location-aware content
+if(currentCity&&currentCity.id!=='home'){
+const c=currentCity;
+h+=`<div class="home-card"><h3>📍 ${c.name} Quick Info</h3>`;
+h+=`<p>🏨 ${c.stay.name} · ${c.stay.cost}</p>`;
+if(c.stay.notes)h+=`<p>📝 ${c.stay.notes}</p>`;
+h+=`</div>`;
+if(c.activities.length){
+h+=`<div class="home-card"><h3>🎯 Things to Do</h3><ul>`;
+c.activities.forEach(a=>h+=`<li>${a.dogOk===true?'✅':'⚠️'} <a href="${a.url}" target="_blank">${a.name}</a> — ${a.desc}</li>`);
+h+=`</ul></div>`;
+}
+if(c.eats.length){
+h+=`<div class="home-card"><h3>🍽️ Where to Eat</h3><ul>`;
+c.eats.forEach(e=>h+=`<li>${e.type==='indian'?'🍛':'🍽️'} <a href="${e.url}" target="_blank">${e.name}</a> — ${e.desc}</li>`);
+h+=`</ul></div>`;
+}
+if(c.dogWalks.length){
+h+=`<div class="home-card"><h3>🐕 Dog Walks</h3><ul>`;
+c.dogWalks.forEach(w=>h+=`<li><a href="${w.url}" target="_blank">${w.name}</a></li>`);
+h+=`</ul></div>`;
+}
+if(c.ev.length){
+h+=`<div class="home-card"><h3>⚡ Nearby Charging</h3><ul>`;
+c.ev.forEach(e=>h+=`<li><a href="${e.url}" target="_blank">🔌 ${e.name}</a></li>`);
+h+=`</ul></div>`;
+}
+}
+
+// Task progress
+h+=`<div class="home-card"><h3>📋 Task Progress</h3>
+<div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+<p>${doneT}/${totalT} tasks (${pct}%)</p></div>`;
+
+// Upcoming deadlines
+const upcoming=TRIP_DATA.deadlines.filter(d=>new Date(d.date)>=new Date(now.toDateString())).slice(0,4);
+if(upcoming.length){
+h+=`<div class="home-card"><h3>⏰ Upcoming</h3><ul>`;
+upcoming.forEach(d=>{
+const dd=new Date(d.date);
+const diff=Math.ceil((dd-new Date(now.toDateString()))/(1000*60*60*24));
+const urgency=diff<=2?'color:var(--red)':diff<=7?'color:var(--orange)':'';
+h+=`<li style="${urgency}">${d.item} — <strong>${diff===0?'TODAY':diff===1?'Tomorrow':diff+' days'}</strong></li>`;
+});
+h+=`</ul></div>`;
+}
+
+// Checklist progress
+const chkState=S('checklists');
+let totalChk=0,doneChk=0;
+Object.values(TRIP_DATA.checklists).forEach(arr=>{totalChk+=arr.length;arr.forEach(item=>{if(chkState[item])doneChk++})});
+const chkPct=Math.round(doneChk/totalChk*100);
+h+=`<div class="home-card"><h3>✅ Packing Progress</h3>
+<div class="progress-bar"><div class="progress-fill" style="width:${chkPct}%"></div></div>
+<p>${doneChk}/${totalChk} items packed (${chkPct}%)</p></div>`;
+
+if(!currentCity||currentCity.id==='home'){
+h+=`<div class="home-card"><h3>🗺️ Full Route</h3>
+<a href="https://www.google.com/maps/dir/Enterprise+Rent-A-Car+Brentford+London/Calais/Versailles/Beaune/Avignon/Saint-Paul-de-Vence/Cagnes-sur-Mer/Aix-en-Provence/Montpellier/Lyon/Dijon/Reims/Calais" target="_blank" style="color:var(--green)">📍 Open complete route in Google Maps →</a></div>`;
+}
+el.innerHTML=h;
+}
+
+function renderTasks(){
+const el=document.getElementById('tab-tasks');
+const tasks=S('tasks');
+const totalT=TRIP_DATA.tasks.length;
+const doneT=TRIP_DATA.tasks.filter(t=>tasks[t.id]==='done'||tasks[t.id]==='skip').length;
+const pct=Math.round(doneT/totalT*100);
+let filter='all';
+
+let h=`<h2 style="margin:.5rem 0">📋 Task List</h2>
+<div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+<p style="color:var(--muted);font-size:.8rem;margin-bottom:.5rem">${doneT}/${totalT} (${pct}%)</p>
+<div class="filter-row">
+<button class="btn active-done" onclick="filterTasks('all',this)">All</button>
+<button class="btn" onclick="filterTasks('pending',this)">Pending</button>
+<button class="btn" onclick="filterTasks('him',this)">👨 Him</button>
+<button class="btn" onclick="filterTasks('her',this)">👩 Her</button>
+<button class="btn" onclick="filterTasks('both',this)">👫 Both</button>
+<button class="btn" onclick="filterTasks('car',this)">🚗</button>
+<button class="btn" onclick="filterTasks('booking',this)">📅</button>
+<button class="btn" onclick="filterTasks('dog',this)">🐕</button>
+<button class="btn" onclick="filterTasks('docs',this)">📄</button>
+</div>
+<div id="task-list"></div>`;
+el.innerHTML=h;
+renderTaskList('all');
+}
+
+function renderTaskList(filter){
+const el=document.getElementById('task-list');
+const states=S('tasks');
+const notes=S('task_notes');
+let h='';
+TRIP_DATA.tasks.forEach(t=>{
+const st=states[t.id]||'pending';
+const show=filter==='all'||(filter==='pending'&&st==='pending')||filter===t.who||filter===t.category;
+if(!show)return;
+const cls=st==='done'?'card done':st==='skip'?'card not-needed':'card'+(isUrgent(t.deadline)?' urgent':'');
+const whoClass=t.who==='him'?'badge-him':t.who==='her'?'badge-her':'badge-both';
+const whoLabel=t.who==='him'?'👨 Him':t.who==='her'?'👩 Her':'👫 Both';
+h+=`<div class="${cls}" data-filter-who="${t.who}" data-filter-cat="${t.category}">
+<h3>${t.task}</h3>
+<div style="display:flex;gap:.3rem;align-items:center;flex-wrap:wrap;margin:.3rem 0">
+<span class="badge ${whoClass}">${whoLabel}</span>
+<span class="badge badge-cat">📅 ${t.deadline}</span>
+<span class="badge badge-cat">${t.category}</span>
+</div>
+<div class="btn-group">
+<button class="btn ${st==='done'?'active-done':''}" onclick="setTask('${t.id}','done')">✅ Done</button>
+<button class="btn ${st==='skip'?'active-skip':''}" onclick="setTask('${t.id}','skip')">⏭️ Not Needed</button>
+${st!=='pending'?`<button class="btn" onclick="setTask('${t.id}','pending')">↩️ Reset</button>`:''}
+</div>
+<textarea class="notes-input" rows="1" placeholder="Notes..." oninput="saveTaskNote('${t.id}',this.value)">${notes[t.id]||t.notes||''}</textarea>
+</div>`;
+});
+el.innerHTML=h||'<p style="color:var(--muted);text-align:center;padding:2rem">All done! 🎉</p>';
+}
+
+function isUrgent(d){
+if(!d||d==='ASAP')return true;
+const now=new Date();
+const match=d.match(/(\d{1,2})\s*(Apr|May)/i);
+if(!match)return false;
+const month=match[2].toLowerCase()==='apr'?3:4;
+const target=new Date(2026,month,parseInt(match[1]));
+return(target-now)/(1000*60*60*24)<=3;
+}
+
+function setTask(id,state){const s=S('tasks');s[id]=state;W('tasks',s);renderTasks();renderHome()}
+function saveTaskNote(id,val){const n=S('task_notes');n[id]=val;W('task_notes',n)}
+function filterTasks(f,btn){
+document.querySelectorAll('.filter-row .btn').forEach(b=>{b.classList.remove('active-done')});
+if(btn)btn.classList.add('active-done');
+renderTaskList(f);
+}
+
+function renderRoute(){
+const el=document.getElementById('tab-route');
+let h=`<h2 style="margin:.5rem 0">🗺️ Route & City Guide</h2>
+<a href="https://www.google.com/maps/dir/Enterprise+Rent-A-Car+Brentford+London/Calais/Versailles/Beaune/Avignon/Saint-Paul-de-Vence/Cagnes-sur-Mer/Aix-en-Provence/Montpellier/Lyon/Dijon/Reims/Calais" target="_blank" class="btn" style="display:inline-block;margin-bottom:1rem;background:var(--accent);color:#fff;border:none;padding:.5rem 1rem;font-size:.85rem">📍 Full Route on Google Maps</a>`;
+
+TRIP_DATA.cities.forEach(c=>{
+h+=`<div class="city-card"><div class="city-header" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+<h2>${c.days} — ${c.name}</h2>
+<p>${c.date} · 🚗 ${c.drive.km}km ${c.drive.time} from ${c.drive.from} · 🏨 ${c.stay.name} ${c.stay.cost}</p>
+</div><div class="city-body" style="display:none">`;
+
+// Stay
+h+=`<div class="section-title">🏨 Stay</div>
+<div class="poi"><strong>${c.stay.name}</strong> · ${c.stay.cost}<div class="sub">${c.stay.notes||''}</div></div>`;
+
+// Drive
+h+=`<div class="section-title">🚗 Drive</div>
+<div class="poi"><strong>${c.drive.from} → ${c.name}</strong> · ${c.drive.km}km · ${c.drive.time}<div class="sub">${c.drive.notes}</div></div>`;
+
+// EV Charging
+if(c.ev.length){
+h+=`<div class="section-title">⚡ EV Charging</div>`;
+c.ev.forEach(e=>h+=`<a href="${e.url}" target="_blank" class="poi">🔌 ${e.name}</a>`);
+}
+
+// Dog walks
+if(c.dogWalks.length){
+h+=`<div class="section-title">🐕 Dog Walks</div>`;
+c.dogWalks.forEach(w=>h+=`<a href="${w.url}" target="_blank" class="poi">${w.name}</a>`);
+}
+
+// Activities
+if(c.activities.length){
+h+=`<div class="section-title">🎯 Things to Do</div>`;
+c.activities.forEach(a=>h+=`<a href="${a.url}" target="_blank" class="poi ${a.dogOk===true?'':'no-dog'}">
+${a.dogOk===true?'✅':'⚠️'} ${a.name}<div class="sub">${a.desc}</div></a>`);
+}
+
+// Restaurants
+if(c.eats.length){
+h+=`<div class="section-title">🍽️ Where to Eat</div>`;
+c.eats.forEach(e=>h+=`<a href="${e.url}" target="_blank" class="poi ${e.type==='indian'?'indian':''}">
+${e.type==='indian'?'🍛':'🍽️'} ${e.name}<div class="sub">${e.desc}</div></a>`);
+}
+
+// Shops
+if(c.shops&&c.shops.length){
+h+=`<div class="section-title">🛍️ Shopping</div>`;
+c.shops.forEach(s=>h+=`<a href="${s.url}" target="_blank" class="poi">🛒 ${s.name}</a>`);
+}
+
+h+=`</div></div>`;
+});
+el.innerHTML=h;
+}
+
+function renderContacts(){
+const el=document.getElementById('tab-contacts');
+const cats=[{id:'emergency',label:'🚨 Emergency'},{id:'car',label:'🚗 Car & Breakdown'},{id:'dog',label:'🐕 Dog / Vet'},{id:'stay',label:'🏨 Accommodation'},{id:'booking',label:'📅 Bookings'},{id:'travel',label:'🚄 Travel'}];
+let h='<h2 style="margin:.5rem 0">📞 Important Contacts</h2>';
+cats.forEach(cat=>{
+const items=TRIP_DATA.contacts.filter(c=>c.category===cat.id);
+if(!items.length)return;
+h+=`<h3 style="margin:.8rem 0 .4rem;color:var(--accent2);font-size:.9rem">${cat.label}</h3>`;
+items.forEach(c=>{
+const tel=c.phone.match(/[\d+]/)?`<a href="tel:${c.phone.replace(/\s/g,'')}"style="background:var(--green);color:#fff;padding:.3rem .8rem;border-radius:6px;text-decoration:none;font-size:.8rem">📞 Call</a>`:`<span style="color:var(--muted);font-size:.8rem">${c.phone}</span>`;
+h+=`<div class="contact-card"><div><strong style="font-size:.9rem">${c.name}</strong><br><span style="color:var(--muted);font-size:.8rem">${c.phone}</span></div>${tel}</div>`;
+});
+});
+// Editable notes
+h+=`<h3 style="margin:1rem 0 .4rem;color:var(--accent2);font-size:.9rem">📝 Your Notes</h3>
+<textarea id="contact-notes" class="notes-input" rows="6" placeholder="Add phone numbers, booking refs, etc..." oninput="localStorage.setItem('ft_contact_notes',this.value)" style="font-size:.85rem"></textarea>`;
+el.innerHTML=h;
+const cn=document.getElementById('contact-notes');
+if(cn)cn.value=localStorage.getItem('ft_contact_notes')||'';
+}
+
+function renderChecklist(){
+const el=document.getElementById('tab-checklist');
+const state=S('checklists');
+const labels={pack_him:'👔 His Clothes',pack_her:'👗 Her Clothes',toiletries:'🧴 Toiletries & Health',tech:'🔌 Tech & Car',car_comfort:'🚗 Car Comfort',dog:'🐕 Dog Supplies',docs:'📄 Documents',car_legal:'🦺 Car Legal Requirements'};
+let totalAll=0,doneAll=0;
+Object.values(TRIP_DATA.checklists).forEach(arr=>{totalAll+=arr.length;arr.forEach(i=>{if(state[i])doneAll++})});
+const pct=Math.round(doneAll/totalAll*100);
+
+let h=`<h2 style="margin:.5rem 0">✅ Packing & Checklists</h2>
+<div class="progress-bar"><div class="progress-fill" style="width:${pct}%"></div></div>
+<p style="color:var(--muted);font-size:.8rem;margin-bottom:.8rem">${doneAll}/${totalAll} items (${pct}%)</p>`;
+
+// Location-aware highlight
+if(currentCity){
+h+=`<p style="color:var(--green);font-size:.8rem;margin-bottom:.5rem">📍 Near ${currentCity.name}</p>`;
+}
+
+Object.entries(TRIP_DATA.checklists).forEach(([key,items])=>{
+const catDone=items.filter(i=>state[i]).length;
+h+=`<div class="checklist-group">
+<h3 onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'" style="cursor:pointer">
+${labels[key]||key} <span style="color:var(--muted);font-size:.75rem">${catDone}/${items.length}</span></h3>
+<div>`;
+items.forEach(item=>{
+const checked=state[item]?'checked':'';
+h+=`<div class="chk ${state[item]?'done':''}">
+<input type="checkbox" ${checked} onchange="toggleChk('${item.replace(/'/g,"\\'")}',this)">
+<span>${item}</span></div>`;
+});
+h+=`</div></div>`;
+});
+el.innerHTML=h;
+}
+
+function toggleChk(item,el){const s=S('checklists');s[item]=el.checked;W('checklists',s);renderChecklist();renderHome()}
+
+// Init
+renderTasks();renderRoute();renderContacts();renderChecklist();renderHome();
+detectLocation();
+
+function renderPhrases(){
+const el=document.getElementById('tab-phrases');
+let h=`<h2 style="margin:.5rem 0">🇫🇷 Essential French Phrases</h2>
+<p style="color:var(--muted);font-size:.85rem;margin-bottom:.5rem">Tap any phrase to hear pronunciation (if your browser supports speech).</p>
+<input style="width:100%;padding:.6rem .8rem;background:var(--card);border:1.5px solid var(--border);border-radius:10px;color:var(--text);font-size:.85rem;margin-bottom:.8rem;font-family:inherit" placeholder="🔍 Search phrases..." oninput="filterPhrases(this.value)">`;
+PHRASES.forEach(cat=>{
+h+=`<div class="phrase-cat">${cat.cat}</div>`;
+cat.phrases.forEach(p=>{
+h+=`<div class="phrase-card" data-search="${p.fr.toLowerCase()} ${p.en.toLowerCase()}" onclick="speakFr('${p.fr.replace(/'/g,"\\'")}')">
+<div><div class="fr">${p.fr}</div><div class="phonetic">${p.ph}</div></div>
+<div class="en">${p.en}</div>
+</div>`;
+});
+});
+el.innerHTML=h;
+}
+
+function speakFr(text){
+if(!window.speechSynthesis)return;
+const u=new SpeechSynthesisUtterance(text);
+u.lang='fr-FR';u.rate=0.8;
+speechSynthesis.speak(u);
+}
+
+function filterPhrases(q){
+q=q.toLowerCase();
+document.querySelectorAll('.phrase-card').forEach(el=>{
+el.style.display=el.dataset.search.includes(q)?'flex':'none';
+});
+}
+
+renderPhrases();
+</script>
 </body>
 </html>
